@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <title>Amazon Finds - Authenticate</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap');
+            body{
+                background-color: #222222;
+                font-family: 'Poppins', sans-serif;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <center>
+        <br>
+        <button class="btn btn-danger" style="font-size:20px;" onclick="alert('This Section contains sensitive access and information')">This Section is Password Protected</button>
+        <br><br>
+        <div style="width: 30%;background-color:#323232;border-radius:5px;min-width:350px;">
+            <img src="" alt="logo" style="margin-top: 3%;">
+            <form action="/admin" method="POST">
+                <input type="text" name="password" class="form-control" placeholder="Password" style="width: 85%;margin-top:3%;">
+                <br>
+                <input type="submit" class="btn btn-primary" value="Continue" style="margin-bottom:3%;">
+            </form>
+        </div>
+        </center>
+    </body>
+</html>
