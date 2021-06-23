@@ -5,34 +5,99 @@
         <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
             @import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap');
-            body{
+            .dark{
                 background-color: #222222;
                 font-family: 'Poppins', sans-serif;
+                color: whitesmoke;
+            }
+            .white{
+                background-color: whitesmoke;
+                font-family: 'Poppins', sans-serif;
+                color: #222222;
+            }
+            .dark-div{
+                background-color:#323232;
+            }
+            .white-div{
+                background-color: #cfcfcf;
+            }
+            input.form-control.dark {
+                background-color:#202020;
                 color: white;
+                border: #202020;
+            }
+            input.form-control.white {
+                background-color:#e9e9e9;
+                color: black;
             }
         </style>
     </head>
-    <body>
+    <body id="body" class="white">
+        <div class="form-check form-switch" id="themeswitch" style="width: fit-content;font-size:20px;float:right;margin:1%;">
+            <b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b><input type="checkbox" class="form-check-input" onclick="theme()" id="switch" style="float:right" unchecked>
+        </div>
         <center>
-        <br>
+        <br><br><br>
         <button class="btn btn-danger" style="font-size:20px;" onclick="alert('This Section contains sensitive access and information')">This Section is Password Protected</button>
         <br><br>
-        <div style="width: 30%;background-color:#323232;border-radius:5px;min-width:350px;">
+        <div style="width: 30%;border-radius:5px;min-width:350px;" class="white-div" id="div1">
             <img src="" alt="logo" style="margin-top: 3%;">
+            <p style="font-size: 16px;color:#ff4d4d;">{{err}}</p>
             <form action="/admin" method="POST">
-                <input type="text" name="password" class="form-control" placeholder="Password" style="width: 85%;margin-top:3%;">
+                <input type="text" name="password" id="input1" class="form-control white" placeholder="Password" style="width: 85%;margin-top:3%;">
                 <br>
                 <input type="submit" class="btn btn-primary" value="Continue" style="margin-bottom:3%;">
             </form>
         </div>
         </center>
+        <script>
+            window.onload = function(){getTheme()};
+            function getTheme(){
+                var theme = localStorage.getItem("themestate")
+                var themeswitch = document.getElementById('themeswitch');
+                if (theme == "dark"){
+                    document.body.className = "dark";
+                    themeswitch.innerHTML = 
+                    `<b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b><input type="checkbox" class="form-check-input" onclick="theme()" id="switch" style="float:right" checked>`;
+                }
+                else if (theme == "white"){
+                    document.body.className = "white";
+                    themeswitch.innerHTML = 
+                    `<b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b><input type="checkbox" class="form-check-input" onclick="theme()" id="switch" style="float:right" unchecked>`;
+                }
+
+            }
+
+            function theme(){
+                var body = document.body;
+                var themeswitch = document.getElementById('themeswitch');
+                var input1 = document.getElementById('input1');
+                var div1 = document.getElementById('div1');
+                if (body.className == "dark"){
+                    body.className = "white";
+                    div1.className = "white-div";
+                    input1.className = "form-control white";
+                    themeswitch.innerHTML = 
+                    `<b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b><input type="checkbox" class="form-check-input" onclick="theme()" id="switch" style="float:right" unchecked>`;
+                    localStorage.setItem("themestate", "white");
+                }
+                else if (body.className == "white"){
+                    body.className = "dark";
+                    div1.className = "dark-div";
+                    input1.className = "form-control dark";
+                    themeswitch.innerHTML = 
+                    `<b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b><input type="checkbox" class="form-check-input" onclick="theme()" id="switch" style="float:right" checked>`;
+                    localStorage.setItem("themestate", "dark");
+                }
+            }
+        </script>
     </body>
 </html>
