@@ -11,16 +11,15 @@
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-            @import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Ubuntu&family=Work+Sans:wght@400;900&display=swap');
             .dark{
                 background-color: #222222;
-                font-family: 'Poppins', sans-serif;
+                font-family: 'Open Sans', sans-serif;
                 color: whitesmoke;
             }
             .white{
                 background-color: whitesmoke;
-                font-family: 'Poppins', sans-serif;
+                font-family: 'Open Sans', sans-serif;
                 color: #222222;
             }
             .dark-div{
@@ -38,9 +37,118 @@
                 background-color:#e9e9e9;
                 color: black;
             }
+            .nav-bg{
+                background-color:#001f2a;
+            }
         </style>
     </head>
-    <body>
+    <body class="white">
+        <nav class="navbar navbar-expand-lg navbar-dark nav-bg" id="navbar">
+            <a class="navbar-brand" href="/"><b><img src="static/icons/white-plane-small.png">Amazon Finds</b></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="margin-right: 10px;" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="#" style="margin-left: 4px;">About Us</a>
+                  </li>
+                  <!-- <li>
+                    <div class="form-check form-switch" style="margin-top: 6px;margin-left:8px;">
+                        <label></label>
+                        <input type="checkbox" onclick="theme()" style="font-size: 18px;" class="form-check-input">
+                    </div>
+                  </li> -->
+                </ul>
+              </div>
+            </div>
+        </nav>
+        <center>
+        </center>
+        <script>
+            var themealert = 
+            `
+            <center>
+            <div class="form-check form-switch" style="width: fit-content;font-size:20px;" id="themeswitch">
+                <b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b>
+                <input type="checkbox" class="form-check-input" onclick="theme()" style="float: right;" id="switch" unchecked>
+            </div>
+            </center>
+            `
+            var body = document.body;
+            var input1 = document.getElementById('input1');
+            var div1 = document.getElementById('div1');
 
+            window.onload = function(){getTheme()};
+            function getTheme(){
+                var theme = localStorage.getItem("themestate")
+                if (theme == "dark"){
+                    document.body.className = "dark";
+                    //div1.className = "dark-div";
+                    //input1.className = "form-control dark";
+                    themealert = 
+                    `
+                    <center>
+                        <div class="form-check form-switch" style="width: fit-content;font-size:20px;" id="themeswitch">
+                            <b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b>
+                            <input type="checkbox" class="form-check-input" onclick="theme()" style="float: right;" id="switch" checked>
+                        </div>
+                    </center>
+                    `
+                }
+                else if (theme == "white"){
+                    document.body.className = "white";
+                    //div1.className = "white-div";
+                    //input1.className = "form-control white";
+                    themealert = 
+                    `
+                    <center>
+                        <div class="form-check form-switch" style="width: fit-content;font-size:20px;" id="themeswitch">
+                            <b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b>
+                            <input type="checkbox" class="form-check-input" onclick="theme()" style="float: right;" id="switch" unchecked>
+                        </div>
+                    </center>
+                    `
+                }
+
+            }
+
+            function theme(){
+                if (body.className == "dark"){
+                    body.className = "white";
+                    //div1.className = "white-div";
+                    //input1.className = "form-control white";
+                    themealert = 
+                    `
+                    <center>
+                        <div class="form-check form-switch" style="width: fit-content;font-size:20px;" id="themeswitch">
+                            <b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b>
+                            <input type="checkbox" class="form-check-input" onclick="theme()" style="float: right;" id="switch" unchecked>
+                        </div>
+                    </center>
+                    `
+                    localStorage.setItem("themestate", "white");
+                }
+                else if (body.className == "white"){
+                    body.className = "dark";
+                    //div1.className = "dark-div";
+                    //input1.className = "form-control dark";
+                    themealert = 
+                    `
+                    <center>
+                        <div class="form-check form-switch" style="width: fit-content;font-size:20px;" id="themeswitch">
+                            <b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b>
+                            <input type="checkbox" class="form-check-input" onclick="theme()" style="float: right;" id="switch" checked>
+                        </div>
+                    </center>
+                    `
+                    localStorage.setItem("themestate", "dark");
+                }
+            }
+
+            function alertTheme(){
+                alertify.alert(themealert)
+            }
+        </script>
     </body>
 </html>

@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Amazon Finds - Authenticate</title>
+        <title>Amazon Finds - Products</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
@@ -8,9 +8,11 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Ubuntu&family=Work+Sans:wght@400;900&display=swap');
-            /*Work Sans for header and nav*/
+            @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap');
             .dark{
                 background-color: #222222;
                 font-family: 'Open Sans', sans-serif;
@@ -36,25 +38,74 @@
                 background-color:#e9e9e9;
                 color: black;
             }
+            hr.white{
+                background-color: black;
+                color: black;
+                height: 3px;
+                border: 2px;
+                width: 90%;
+            }
+            hr.dark{
+                background-color: #424242;
+                color: #424242;
+                height: 3px;
+                border: 2px;
+                width: 90%;
+            }
         </style>
     </head>
-    <body id="body" class="white">
+    <body class="white">
+        <center>
+        <hr>
         <div class="form-check form-switch" id="themeswitch" style="font-size:20px;float:right;margin:1%;">
             <b>Dark Mode</b>
             <input type="checkbox" class="form-check-input" onclick="theme()" id="switch" unchecked>
         </div>
-        <center>
-        <br><br><br>
-        <button class="btn btn-danger" style="font-size:20px;" onclick="alert('This Section contains sensitive access and information')">This Section is Password Protected</button>
-        <br><br>
-        <div style="width: 30%;border-radius:5px;min-width:350px;" class="white-div" id="div1">
-            <img src="static/icons/circle-logo.png" alt="logo" style="margin-top: 3%;width:30%;">
-            <p style="font-size: 16px;color:#ff4d4d;">{{err}}</p>
-            <form action="/admin" method="POST">
-                <input type="text" name="password" id="input1" class="form-control white" placeholder="Password" style="width: 85%;margin-top:3%;">
+        <p class="alert alert-primary" style="font-size:20px;width:20%;min-width:290px;">Your Products</p>
+        <div class="white-div" style="width: 30%;border-radius:5px;min-width:350px;height:410px;" id="link-div">
+            <br>
+            <form action="/products" method="POST" style="margin-bottom:3%;" enctype="multipart/form-data">
+                <input type="text" class="form-control" name="product-name" placeholder="Product Name" style="margin-bottom:1%;width:85%;">
+                <textarea type="text" class="form-control" name="product-description" placeholder="Product Description" style="margin-bottom:1%;width:85%;"></textarea>
+                <input type="number" class="form-control" name="product-price" placeholder="Product Price" style="margin-bottom:1%;width:85%;">
+                <input type="text" class="form-control" name="product-creator" placeholder="Product Creator/Seller" style="margin-bottom:1%;width:85%">
+                <input type="text" class="form-control" name="employ-name" placeholder="Employ Name" style="margin-bottom:1%;width:85%">
+                <label for="img">Product Image : </label>
+                <input type="file" class="form-control" name="product-image" id="img" placeholder="Product Image" style="margin-bottom:1%;width:85%">
                 <br>
-                <input type="submit" class="btn btn-primary" value="Continue" style="margin-bottom:3%;">
+                <input type="submit" class="btn btn-primary" value="Add Product" style="margin-bottom:2%;">
             </form>
+        </div>
+        <hr>
+        <p class="alert alert-primary" style="font-size:20px;width:20%;min-width:290px;">Existing Products</p>
+        <div id="table-div" style="width: 95%;">
+            <table class="table white" style="width: 90%;">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Price ₹</th>
+                    <th scope="col">Image Link</th>
+                    <th scope="col">Times Clicked</th>
+                    <th scope="col">Creator/Seller</th>
+                    <th scope="col">Employ Name</th>
+                    <th scope="col">Date Added</th>
+                </tr>
+                {% for p in products %}
+                <tr>
+                    <th scope="row">{{p[0]}}</th>
+                    <td>{{p[1]}}</td>
+                    <td>{{p[2]}}</td>
+                    <td>{{p[3]}}</td>
+                    <td>{{p[4]}}</td>
+                    <td>{{p[8]}}</td>
+                    <td>{{p[5]}}</td>
+                    <td>{{p[6]}}</td>
+                    <td>{{p[7]}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <br>
         </div>
         </center>
         <script>
