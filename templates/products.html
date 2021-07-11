@@ -56,11 +56,7 @@
     </head>
     <body class="white">
         <center>
-        <hr>
-        <div class="form-check form-switch" id="themeswitch" style="font-size:20px;float:right;margin:1%;">
-            <b>Dark Mode</b>
-            <input type="checkbox" class="form-check-input" onclick="theme()" id="switch" unchecked>
-        </div>
+        <hr class="white">
         <p class="alert alert-primary" style="font-size:20px;width:20%;min-width:290px;">Your Products</p>
         <div class="white-div" style="width: 30%;border-radius:5px;min-width:350px;height:410px;" id="link-div">
             <br>
@@ -76,7 +72,7 @@
                 <input type="submit" class="btn btn-primary" value="Add Product" style="margin-bottom:2%;">
             </form>
         </div>
-        <hr>
+        <hr class="white">
         <p class="alert alert-primary" style="font-size:20px;width:20%;min-width:290px;">Existing Products</p>
         <div id="table-div" style="width: 95%;">
             <table class="table white" style="width: 90%;">
@@ -109,51 +105,6 @@
         </div>
         </center>
         <script>
-            window.onload = function(){getTheme()};
-            function getTheme(){
-                var theme = localStorage.getItem("themestate")
-                var themeswitch = document.getElementById('themeswitch');
-                var input1 = document.getElementById('input1');
-                var div1 = document.getElementById('div1');
-                if (theme == "dark"){
-                    document.body.className = "dark";
-                    div1.className = "dark-div";
-                    input1.className = "form-control dark";
-                    themeswitch.innerHTML = 
-                    `<b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b><input type="checkbox" class="form-check-input" onclick="theme()" id="switch" style="float:right" checked>`;
-                }
-                else if (theme == "white"){
-                    document.body.className = "white";
-                    div1.className = "white-div";
-                    input1.className = "form-control white";
-                    themeswitch.innerHTML = 
-                    `<b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b><input type="checkbox" class="form-check-input" onclick="theme()" id="switch" style="float:right" unchecked>`;
-                }
-
-            }
-
-            function theme(){
-                var body = document.body;
-                var themeswitch = document.getElementById('themeswitch');
-                var input1 = document.getElementById('input1');
-                var div1 = document.getElementById('div1');
-                if (body.className == "dark"){
-                    body.className = "white";
-                    div1.className = "white-div";
-                    input1.className = "form-control white";
-                    themeswitch.innerHTML = 
-                    `<b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b><input type="checkbox" class="form-check-input" onclick="theme()" id="switch" style="float:right" unchecked>`;
-                    localStorage.setItem("themestate", "white");
-                }
-                else if (body.className == "white"){
-                    body.className = "dark";
-                    div1.className = "dark-div";
-                    input1.className = "form-control dark";
-                    themeswitch.innerHTML = 
-                    `<b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b><input type="checkbox" class="form-check-input" onclick="theme()" id="switch" style="float:right" checked>`;
-                    localStorage.setItem("themestate", "dark");
-                }
-            }
         </script>
     </body>
 </html>

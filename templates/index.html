@@ -6,6 +6,7 @@
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
         <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -40,6 +41,21 @@
             .nav-bg{
                 background-color:#001f2a;
             }
+            #topbutton{
+                display: none;
+                position: fixed;
+                bottom: 20px;
+                right: 30px;
+                z-index: 99;
+                font-size: 18px;
+                border: none;
+                outline: none;
+                border-radius: 20px;
+                padding-top: 8px;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-bottom: 6px;
+            }
         </style>
     </head>
     <body class="white">
@@ -63,91 +79,79 @@
               </div>
             </div>
         </nav>
+        <button id="topbutton" class="btn btn-dark" onclick="topFunction()"><i style="font-size:30px;" class="bi bi-arrow-bar-up"></i></button>
         <center>
+        <div style="width: 80%;min-width:470px;margin-top:1%;" id="search_div">
+            <form action="/filter" method="POST">
+                <div class="input-group mb-3">
+                    <select name="filt" class="btn btn-secondary dropdown" id="filter" onclick="changesearch()" style="font-size: 18px;">
+                        <option value="name">Name</option>
+                        <option value="price">Price</option>
+                    </select>
+                    <input type="text" class="form-control" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
+                    <input type="submit" value="Search" class="btn btn-primary" style="font-size: 18px;">
+                    <button class="btn btn-secondary" type="button" style="font-size: 18px;">Clear</button>
+                  </div>
+            </form>
+        </div>
         </center>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
         <script>
-            var themealert = 
-            `
-            <center>
-            <div class="form-check form-switch" style="width: fit-content;font-size:20px;" id="themeswitch">
-                <b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b>
-                <input type="checkbox" class="form-check-input" onclick="theme()" style="float: right;" id="switch" unchecked>
-            </div>
-            </center>
-            `
-            var body = document.body;
-            var input1 = document.getElementById('input1');
-            var div1 = document.getElementById('div1');
+            mybutton = document.getElementById("topbutton");
+            window.onscroll = function() {scrollFunction()};
 
-            window.onload = function(){getTheme()};
-            function getTheme(){
-                var theme = localStorage.getItem("themestate")
-                if (theme == "dark"){
-                    document.body.className = "dark";
-                    //div1.className = "dark-div";
-                    //input1.className = "form-control dark";
-                    themealert = 
-                    `
-                    <center>
-                        <div class="form-check form-switch" style="width: fit-content;font-size:20px;" id="themeswitch">
-                            <b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b>
-                            <input type="checkbox" class="form-check-input" onclick="theme()" style="float: right;" id="switch" checked>
-                        </div>
-                    </center>
-                    `
-                }
-                else if (theme == "white"){
-                    document.body.className = "white";
-                    //div1.className = "white-div";
-                    //input1.className = "form-control white";
-                    themealert = 
-                    `
-                    <center>
-                        <div class="form-check form-switch" style="width: fit-content;font-size:20px;" id="themeswitch">
-                            <b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b>
-                            <input type="checkbox" class="form-check-input" onclick="theme()" style="float: right;" id="switch" unchecked>
-                        </div>
-                    </center>
-                    `
-                }
-
-            }
-
-            function theme(){
-                if (body.className == "dark"){
-                    body.className = "white";
-                    //div1.className = "white-div";
-                    //input1.className = "form-control white";
-                    themealert = 
-                    `
-                    <center>
-                        <div class="form-check form-switch" style="width: fit-content;font-size:20px;" id="themeswitch">
-                            <b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b>
-                            <input type="checkbox" class="form-check-input" onclick="theme()" style="float: right;" id="switch" unchecked>
-                        </div>
-                    </center>
-                    `
-                    localStorage.setItem("themestate", "white");
-                }
-                else if (body.className == "white"){
-                    body.className = "dark";
-                    //div1.className = "dark-div";
-                    //input1.className = "form-control dark";
-                    themealert = 
-                    `
-                    <center>
-                        <div class="form-check form-switch" style="width: fit-content;font-size:20px;" id="themeswitch">
-                            <b style="float: left;">Dark Mode : &ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;&ThickSpace;</b>
-                            <input type="checkbox" class="form-check-input" onclick="theme()" style="float: right;" id="switch" checked>
-                        </div>
-                    </center>
-                    `
-                    localStorage.setItem("themestate", "dark");
+            function scrollFunction() {
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    mybutton.style.display = "block";
+                } else {
+                    mybutton.style.display = "none";
                 }
             }
 
-            function alertTheme(){
-                alertify.alert(themealert)
+            function topFunction() {
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+
+            function changesearch(){
+                var div = document.getElementById('search_div');
+                var fil = document.getElementById('filter');
+                if (fil == "name"){
+                    div.innerHTML = 
+                    `
+                    <form action="/filter" method="POST">
+                        <div class="input-group mb-3">
+                            <select name="filt" class="btn btn-secondary dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;">
+                                <option value="name">Name</option>
+                                <option value="price">Price</option>
+                            </select>
+                            <input type="text" class="form-control" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
+                            <input type="submit" value="Search" class="btn btn-primary" style="font-size: 18px;">
+                            <button class="btn btn-secondary" type="button" style="font-size: 18px;">Clear</button>
+                          </div>
+                    </form>
+                    `;
+                }
+                else if (fil == "price"){
+                    div.innerHTML = 
+                    `
+                    <form action="/filter" method="POST">
+                        <div class="input-group mb-3">
+                            <select name="filt" class="btn btn-secondary dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;">
+                                <option value="name">Name</option>
+                                <option value="price">Price</option>
+                            </select>
+                            <select name="search_bar" class="btn btn-dark dropdown" style="font-size: 18px;">
+                                <option value="highest">Highest to Lowest</option>
+                                <option value="lowest">Lowest to Highest</option>
+                            </select>
+                            <input type="text" class="form-control" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
+                            <input type="submit" value="Search" class="btn btn-primary" style="font-size: 18px;">
+                            <button class="btn btn-secondary" type="button" style="font-size: 18px;">Clear</button>
+                          </div>
+                    </form>
+                    `; 
+                }
             }
         </script>
     </body>
