@@ -20,6 +20,8 @@ global paserr
 paserr = ""
 global proderr
 proderr = ""
+global uperr
+uperr = ""
 global product_list
 product_list = []
 global current_page
@@ -41,14 +43,6 @@ def clear():
     if current_page == '/products':
         fromadminsearch = False
         return redirect('/products')
-
-@app.route('/delete/<int:prod_id>')
-def delete(prod_id):
-    con.reconnect()
-    db = con.cursor()
-    db.execute(f"DELETE FROM products WHERE product_id = {prod_id}")
-    con.commit()
-    return redirect('/products')
 
 @app.route('/')
 def index():
@@ -110,14 +104,15 @@ def add():
         title = request.form['product-name']
         descrip = request.form['product-description']
         price = request.form['product-price']
+        link = request.form['amazon-link']
         image = request.files['product-image']
         creator = request.form['product-creator']
         employ_name = request.form['employ-name']
         date = datetime.now()
-        if title != "" and descrip != "" and price != "" and image != "" and creator != "" and employ_name != "":
+        if title != "" and descrip != "" and price != "" and image.filename != "" and creator != "" and employ_name != "":
             con.reconnect()
             db = con.cursor()
-            db.execute(f"""INSERT INTO products(name, description, price, image, creator, employ_name, date, times_clicked) VALUES("{title}", "{descrip}", "{price}", "{image.filename}", "{creator}", "{employ_name}", "{date.date()}", 0)""")
+            db.execute(f"""INSERT INTO products(name, description, price, link, image, creator, employ_name, date, times_clicked) VALUES("{title}", "{descrip}", "{price}", "{link}", "{image.filename}", "{creator}", "{employ_name}", "{date.date()}", 0)""")
             con.commit()
             return redirect('/products')
         else:
@@ -132,6 +127,42 @@ def add():
             db.execute("SELECT * from products")
             product_list = db.fetchall()
             return render_template('products.html', products = product_list, err = proderr)
+
+@app.route('/delete/<int:prod_id>')
+def delete(prod_id):
+    con.reconnect()
+    db = con.cursor()
+    db.execute(f"DELETE FROM products WHERE product_id = {prod_id}")
+    con.commit()
+    return redirect('/products')
+
+@app.route('/update/<int:prod_id>', methods = ["POST", "GET"])
+def update(prod_id):
+    global uperr
+    if request.form == "POST":
+        title = request.form['product-name']
+        descrip = request.form['product-description']
+        price = request.form['product-price']
+        link = request.form['amazon-link']
+        image = request.files['product-image']
+        creator = request.form['product-creator']
+        employ_name = request.form['employ-name']
+        date = datetime.now()
+        if title != "" and descrip != "" and price != "" and image.filename != "" and creator != "" and employ_name != "":
+            con.reconnect()
+            db = con.cursor()
+            db.execute(f"""UPDATE products SET title = {title}, description = {descrip}, price = {price}, link = {link}, image = {image.filename}, creator = {creator}, employ_name = {employ_name}, date = {date.date()} """)
+            con.commit()
+            return redirect('/products')
+        else:
+            uperr = "Please fill out all the details"
+            return redirect(f'/update/{prod_id}')
+    else:
+        con.reconnect()
+        db = con.cursor()
+        db.execute(f"SELECT * FROM products WHERE product_id = {prod_id}")
+        product = db.fetchall()[0]
+        return render_template('update.html', p = product, err = uperr)
 
 if __name__ == "__main__":
     app.run(debug=True)
