@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for
-from werkzeug.security import check_password_hash
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user
+import os
 import mysql.connector
 from datetime import datetime
 from models import app, db2, con, Users
+from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import check_password_hash
+from scrapper import getall, getprice, getrating, getavail
+from flask import Flask, render_template, request, redirect, url_for
+from flask_login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -101,18 +103,21 @@ def add():
     global current_page
     current_page = '/products'
     if request.method == "POST":
-        title = request.form['product-name']
+        # product_id, asin, name, description, catagory, link, image, creator, employ_name, date, times_clicked
+        asin = request.form['asin'].upper()
+        product = getall(asin)
+        title = product['name']
+        image = product['image']
         descrip = request.form['product-description']
-        price = request.form['product-price']
         link = request.form['amazon-link']
-        image = request.files['product-image']
+        catagory = request.form.get('product-cata')
         creator = request.form['product-creator']
         employ_name = request.form['employ-name']
         date = datetime.now()
-        if title != "" and descrip != "" and price != "" and image.filename != "" and creator != "" and employ_name != "":
+        if descrip != "" and link != "" and creator != "" and employ_name != "" and catagory != "-- Select Product Catagory --":
             con.reconnect()
             db = con.cursor()
-            db.execute(f"""INSERT INTO products(name, description, price, link, image, creator, employ_name, date, times_clicked) VALUES("{title}", "{descrip}", "{price}", "{link}", "{image.filename}", "{creator}", "{employ_name}", "{date.date()}", 0)""")
+            db.execute(f"""INSERT INTO products(asin, name, description, catagory, link, image, creator, employ_name, date, times_clicked) VALUES("{asin}", "{title}", "{descrip}", "{catagory}", "{link}", "{image}", "{creator}", "{employ_name}", "{date.date()}", 0)""")
             con.commit()
             return redirect('/products')
         else:
@@ -139,19 +144,21 @@ def delete(prod_id):
 @app.route('/update/<int:prod_id>', methods = ["POST", "GET"])
 def update(prod_id):
     global uperr
-    if request.form == "POST":
-        title = request.form['product-name']
+    if request.method == "POST":
+        asin = request.form['asin'].upper()
+        product = getall(asin)
+        title = product['name']
+        image = product['image']
         descrip = request.form['product-description']
-        price = request.form['product-price']
         link = request.form['amazon-link']
-        image = request.files['product-image']
+        catagory = request.form.get('product-cata')
         creator = request.form['product-creator']
         employ_name = request.form['employ-name']
         date = datetime.now()
-        if title != "" and descrip != "" and price != "" and image.filename != "" and creator != "" and employ_name != "":
+        if asin != "" and descrip != "" and link != "" and creator != "" and employ_name != "" and catagory != "-- Select Product Catagory --":
             con.reconnect()
             db = con.cursor()
-            db.execute(f"""UPDATE products SET title = {title}, description = {descrip}, price = {price}, link = {link}, image = {image.filename}, creator = {creator}, employ_name = {employ_name}, date = {date.date()} """)
+            db.execute(f"""UPDATE products SET asin = "{asin}", name = "{title}", description = "{descrip}", catagory = "{catagory}", link = "{link}", image = "{image}", creator = "{creator}", employ_name = "{employ_name}", date = "{date.date()}" WHERE product_id = "{prod_id}" """)
             con.commit()
             return redirect('/products')
         else:
