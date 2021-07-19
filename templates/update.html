@@ -72,12 +72,12 @@
         <p style="font-size: 16px;color:#ff4d4d;margin-top:1px;">{{err}}</p>
         <div class="white-div" style="width: 30%;border-radius:5px;min-width:400px;height:385px;" id="link-div">
             <br>
-            <form action="/products" method="POST" style="margin-bottom:3%;" enctype="multipart/form-data">
-                <input type="text" class="form-control" name="asin" id="asin" placeholder="Product Asin" style="margin-bottom:1%;width:85%;">
-                <textarea type="text" class="form-control" name="product-description" id="prod-des" placeholder="Product Description" style="margin-bottom:1%;width:85%;"></textarea>
-                <input type="text" class="form-control" name="amazon-link" id="amaz-link" placeholder="Affiliate Link" style="margin-bottom:1%;width:85%;">
-                <input type="text" class="form-control" name="product-creator" id="prod-creator" placeholder="Product Creator/Seller" style="margin-bottom:1%;width:85%">
-                <input type="text" class="form-control" name="employ-name" id="emp-name" placeholder="Employ Name" style="margin-bottom:1%;width:85%">
+            <form action="/update/{{p[0]}}" method="POST" style="margin-bottom:3%;" enctype="multipart/form-data">
+                <input type="text" class="form-control" name="asin" id="asin" placeholder="Product Asin" style="margin-bottom:1%;width:85%;" value="{{p[1]}}">
+                <textarea type="text" class="form-control" name="product-description" id="prod-des" placeholder="Product Description" style="margin-bottom:1%;width:85%;">{{p[3]}}</textarea>
+                <input type="text" class="form-control" name="amazon-link" id="amaz-link" placeholder="Affiliate Link" style="margin-bottom:1%;width:85%;" value="{{p[5]}}">
+                <input type="text" class="form-control" name="product-creator" id="prod-creator" placeholder="Product Creator/Seller" style="margin-bottom:1%;width:85%" value="{{p[7]}}">
+                <input type="text" class="form-control" name="employ-name" id="emp-name" placeholder="Employ Name" style="margin-bottom:1%;width:85%" value="{{p[8]}}">
                 <select name="product-cata" id="catagory" class="form-select" style="margin-bottom:1%;width:85%;">
                     <option value="none">-- Select Product Catagory --</option>
                     <option value="Kichten">Kichten</option>

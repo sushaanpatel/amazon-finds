@@ -26,6 +26,8 @@ global uperr
 uperr = ""
 global product_list
 product_list = []
+global display_list
+display_list = []
 global current_page
 current_page = ""
 global fromadminsearch
@@ -53,7 +55,20 @@ def index():
     global proderr
     proderr = ""
     global product_list
-    product_list = []
+    db = con.cursor()
+    db.execute("SELECT * FROM products")
+    product_list = db.fetchall()
+    global display_list
+    display_list = []
+    i = 0
+    while True:
+        temp = []
+        i = 0
+        while i < 3:
+            temp.append(product_list[i])
+            i=+1
+        display_list.append(temp)
+
     return render_template('index.html')
 
 @app.route('/admin', methods = ["POST", "GET"])
@@ -105,7 +120,11 @@ def add():
     if request.method == "POST":
         # product_id, asin, name, description, catagory, link, image, creator, employ_name, date, times_clicked
         asin = request.form['asin'].upper()
-        product = getall(asin)
+        try:
+            product = getall(asin)
+        except:
+            proderr = "Product Not Found"
+            return redirect('/products')
         title = product['name']
         image = product['image']
         descrip = request.form['product-description']
@@ -146,7 +165,11 @@ def update(prod_id):
     global uperr
     if request.method == "POST":
         asin = request.form['asin'].upper()
-        product = getall(asin)
+        try:
+            product = getall(asin)
+        except:
+            uperr = "Product Not Found"
+            return redirect(f'/update/{prod_id}')
         title = product['name']
         image = product['image']
         descrip = request.form['product-description']
