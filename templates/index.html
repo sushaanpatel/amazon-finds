@@ -56,6 +56,9 @@
                 padding-right: 10px;
                 padding-bottom: 6px;
             }
+            .gridcard{
+                margin-bottom: 6.5%;
+            }
         </style>
     </head>
     <body class="white">
@@ -81,12 +84,14 @@
         </nav>
         <button id="topbutton" class="btn btn-dark" onclick="topFunction()"><i style="font-size:30px;" class="bi bi-arrow-bar-up"></i></button>
         <center>
-        <div style="width: 80%;min-width:470px;margin-top:1%;" id="search_div">
+        <div style="width: 99%;max-width:1150px;margin-top:1%;" id="search_div">
             <form action="/filter" method="POST">
                 <div class="input-group mb-3">
-                    <select name="filt" class="btn btn-dark dropdown" id="filter" onclick="changesearch()" style="font-size: 18px;">
-                        <option value="name">Name</option>
-                        <option value="price">Price</option>
+                    <select name="filt" class="btn btn-dark dropdown" id="filter" onclick="changesearch()" style="font-size: 18px;width:100px;">
+                        <option value="all">All</option>
+                        <option value="homeapp">Home Appliances &ThickSpace;</option>
+                        <option value="elderassist">Elder Assistance</option>
+                        <option value="elect">Electronic</option>
                     </select>
                     <input type="text" class="form-control" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
                     <input type="submit" value="Search" class="btn btn-primary" style="font-size: 18px;">
@@ -95,7 +100,55 @@
             </form>
         </div>
         </center>
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <div style="width:auto;float:right;margin-right:0.5%;">
+            <form action="/sort" method="POST">
+                <div class="input-group mb-3">
+                    <select name="pricefil" id="" class="btn btn-dark dropdown" style="font-size: 18px;">
+                        <option value="high">Price - High to Low</option>
+                        <option value="low">Price - Low to High</option>
+                    </select>
+                    <input type="submit" value="Sort" class="btn btn-primary" style="font-size: 18px;">
+                </div>
+            </form>
+        </div>
+        <br>
+        <br>
+        <br>
+        <div class="container">
+            {% for i in display %}
+            <div class="row">
+                {% for o in i %}
+                {% with x = getall(o[1]) %}
+                <div class="col">
+                    <div class="card" style="margin-bottom: 6.5%; height:500px;background-color:#cfcfcf;">
+                        <center>
+                        <img src="{{o[6]}}" height="260px" width="260px" alt="" style="margin-top: 5%;">
+                        </center>
+                        <div class="card-body">
+                            <p class="card-title" style="font-size:18px;"><b>{{o[2]}}</b></p>
+                            {% if x['rating'] == 1 %}
+                            <p class="card-text" style="font-size: 18px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i></p>
+                            {% elif x['rating'] == 2 %}
+                            <p class="card-text" style="font-size: 18px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i></p>
+                            {% elif x['rating'] == 3 %}
+                            <p class="card-text" style="font-size: 18px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i></p>
+                            {% elif x['rating'] == 4 %}
+                            <p class="card-text" style="font-size: 18px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i></p>
+                            {% elif x['rating'] == 5 %}
+                            <p class="card-text" style="font-size: 18px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i></p>
+                            {% endif %}
+                            <p class="card-text" style="font-size: 18px;"></p>
+                            <p style="font-size: 18px;" class="btn btn-warning"><i>{{x['price']}}</i></p>
+                            <a href="" class="btn btn-primary" style="float: right;margin-right:4%;font-size:18px;"><b>Buy Now</b></a>
+                        </div>
+                    </div>
+                </div>
+                {% endwith %}
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        <br>
         <script>
             mybutton = document.getElementById("topbutton");
             window.onscroll = function() {scrollFunction()};
@@ -115,42 +168,73 @@
 
             function changesearch(){
                 var div = document.getElementById('search_div');
-                var fil = document.getElementById('filter');
-                if (fil == "name"){
+                var fil = document.getElementById('filter').value;
+                if (fil == "homeapp"){
                     div.innerHTML = 
                     `
                     <form action="/filter" method="POST">
                         <div class="input-group mb-3">
-                            <select name="filt" class="btn btn-secondary dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;">
-                                <option value="name">Name</option>
-                                <option value="price">Price</option>
+                            <select name="cata" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;width:100px;">
+                                <option value="all">All</option>
+                                <option value="homeapp" selected>Home Appliances</option>
+                                <option value="elderassist">Elder Assistance</option>
+                                <option value="elect">Electronic</option>
+                            </select>
+                            <select name="home_filt" class="btn btn-dark dropdown" style="font-size: 18px;">
+                                <option value="highest">Kitchen</option>
+                                <option value="lowest">Bathroom</option>
                             </select>
                             <input type="text" class="form-control" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
                             <input type="submit" value="Search" class="btn btn-primary" style="font-size: 18px;">
-                            <button class="btn btn-secondary" type="button" style="font-size: 18px;">Clear</button>
+                            <button class="btn btn-dark" type="button" style="font-size: 18px;">Clear</button>
                           </div>
                     </form>
                     `;
                 }
-                else if (fil == "price"){
+                else if (fil == "elderassist"){
                     div.innerHTML = 
                     `
                     <form action="/filter" method="POST">
                         <div class="input-group mb-3">
-                            <select name="filt" class="btn btn-secondary dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;">
-                                <option value="name">Name</option>
-                                <option value="price">Price</option>
+                            <select name="cata" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;width:100px;">
+                                <option value="all">All</option>
+                                <option value="homeapp">Home Appliances</option>
+                                <option value="elderassist" selected>Elder Assistance</option>
+                                <option value="elect">Electronic</option>
                             </select>
-                            <select name="search_bar" class="btn btn-dark dropdown" style="font-size: 18px;">
-                                <option value="highest">Highest to Lowest</option>
-                                <option value="lowest">Lowest to Highest</option>
+                            <select name="elder_filt" class="btn btn-dark dropdown" style="font-size: 18px;">
+                                <option value="highest">Cushions</option>
+                                <option value="lowest">Accupenture</option>
                             </select>
                             <input type="text" class="form-control" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
                             <input type="submit" value="Search" class="btn btn-primary" style="font-size: 18px;">
-                            <button class="btn btn-secondary" type="button" style="font-size: 18px;">Clear</button>
+                            <button class="btn btn-dark" type="button" style="font-size: 18px;">Clear</button>
                           </div>
                     </form>
                     `; 
+                }
+                else if (fil == "elect"){
+                    div.innerHTML = 
+                    `
+                    <form action="/filter" method="POST">
+                        <div class="input-group mb-3">
+                            <select name="cata" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;width:100px;">
+                                <option value="all">All</option>
+                                <option value="homeapp">Home Appliances</option>
+                                <option value="elderassist">Elder Assistance</option>
+                                <option value="elect" selected>Electronic</option>
+                            </select>
+                            <select name="elect_filt" class="btn btn-dark dropdown" style="font-size: 18px;">
+                                <option value="highest">Mobile</option>
+                                <option value="lowest">Laptop</option>
+                            </select>
+                            </select>
+                            <input type="text" class="form-control" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
+                            <input type="submit" value="Search" class="btn btn-primary" style="font-size: 18px;">
+                            <button class="btn btn-dark" type="button" style="font-size: 18px;">Clear</button>
+                          </div>
+                    </form>
+                    `;
                 }
             }
         </script>

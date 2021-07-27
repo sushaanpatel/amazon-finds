@@ -21,8 +21,11 @@ def getall(asin):
         price = amazon.find("span", attrs = {"id":"priceblock_ourprice"})
         out['price'] = price.string.split('.')[0]
     except AttributeError:
-        price = amazon.find("span", attrs = {"id":"priceblock_dealprice"})
-        out['price'] = price.string.split('.')[0]
+        try:
+            price = amazon.find("span", attrs = {"id":"priceblock_dealprice"})
+            out['price'] = price.string.split('.')[0]
+        except:
+            out['price'] = "NA"
     #--image--
     try:
         img = amazon.find("img", attrs = {"id":"landingImage"})
@@ -32,7 +35,7 @@ def getall(asin):
     #--rating--
     try:
         rating = amazon.find("span", attrs = {"class":"a-icon-alt"})
-        out['rating'] = rating.string.split(' ')[0]
+        out['rating'] = round(float(rating.string.split(' ')[0]))
     except AttributeError:
         out['rating'] = "NA"
     #--ratingno--

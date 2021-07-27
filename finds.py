@@ -32,6 +32,8 @@ global current_page
 current_page = ""
 global fromadminsearch
 fromadminsearch = False
+global fromsearch
+fromsearch = False
 
 @app.route('/logout')
 def logout():
@@ -55,21 +57,58 @@ def index():
     global proderr
     proderr = ""
     global product_list
-    db = con.cursor()
-    db.execute("SELECT * FROM products")
-    product_list = db.fetchall()
     global display_list
-    display_list = []
-    i = 0
-    while True:
-        temp = []
-        i = 0
-        while i < 3:
-            temp.append(product_list[i])
-            i=+1
-        display_list.append(temp)
+    con.reconnect()
+    db = con.cursor()
+    if not fromsearch:
+        db.execute("SELECT * from products")
+        product_list = db.fetchall()
+        lenght = len(product_list)
+        count = 0
+        display_list = []
+        while count < lenght:
+            try:
+                temp = []
+                temp.append(product_list[count])
+                temp.append(product_list[count+1])
+                temp.append(product_list[count+2])
+                display_list.append(temp)
+                count += 3
+            except IndexError:
+                if lenght%3 == 1:
+                    x = product_list[::-1]
+                    y = []
+                    y.append(x[0])
+                    display_list.append(y)
+                    count += 3
+                if lenght%3 == 2:
+                    x = product_list[::-1]
+                    y = []
+                    y.append(x[0])
+                    y.append(x[1])
+                    display_list.append(y[::-1])
+                    count += 3
+    return render_template('index.html', display = display_list, prod = product_list, getall = getall)
 
-    return render_template('index.html')
+@app.route('/search', methods = ["POST", "GET"])
+def search():
+    global display_list
+    global fromsearch
+    fromsearch = True
+    if request.method == "POST":
+        keyword = request.form[''].lower()
+        catagory = request.form.get('')
+        if catagory == "All":
+            con.reconnect()
+            db = con.cursor()
+            db.execute(f"""SELECT * FROM products WHERR name LIKE '%{keyword}%'""")
+            query = db.fetchall()
+            query = query[::-1]
+            for i in query:
+                display_list.append(i)
+        return redirect('/')
+
+
 
 @app.route('/admin', methods = ["POST", "GET"])
 def admin():
@@ -105,9 +144,10 @@ def adminsearch():
         query = db.fetchall()
         fromadminsearch = True
         product_list = query
+        product_list = product_list[::-1]
         return redirect('/products')
 
-
+# add extra info in card
 @app.route('/products', methods = ["POST", "GET"])
 @login_required
 def add():
@@ -118,7 +158,6 @@ def add():
     global current_page
     current_page = '/products'
     if request.method == "POST":
-        # product_id, asin, name, description, catagory, link, image, creator, employ_name, date, times_clicked
         asin = request.form['asin'].upper()
         try:
             product = getall(asin)
@@ -144,13 +183,14 @@ def add():
             return redirect('/products')
     else:
         if fromadminsearch:
-            return render_template('products.html', products = product_list, err = proderr)
+            return render_template('products.html', products = product_list, err = proderr, getprice = getprice)
         else:
             con.reconnect()
             db = con.cursor()
             db.execute("SELECT * from products")
             product_list = db.fetchall()
-            return render_template('products.html', products = product_list, err = proderr)
+            product_list = product_list[::-1]
+            return render_template('products.html', products = product_list, err = proderr, getprice = getprice)
 
 @app.route('/delete/<int:prod_id>')
 def delete(prod_id):

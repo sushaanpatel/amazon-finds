@@ -83,8 +83,11 @@
         <!-- <hr class="white"> -->
         <a href="/logout" class="btn btn-danger" style="float: left;margin:4px;">Log-out</a>
         <button id="topbutton" class="btn btn-dark" onclick="topFunction()"><i style="font-size:30px;" class="bi bi-arrow-bar-up"></i></button>
-        <br>
-        <p class="alert alert-primary" style="font-size:20px;width:20%;min-width:290px;">Add Products</p>
+        <br><br>
+        <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#collapse" aria-expanded="false" aria-controls="collapse" style="font-size: 20px;"><b>
+            Add Product
+        </b></button>
+        <div class="collapse" id="collapse">
         <p style="font-size: 16px;color:#ff4d4d;">{{err}}</p>
         <div class="white-div" style="width: 30%;border-radius:5px;min-width:400px;height:385px;" id="link-div">
             <br>
@@ -102,8 +105,9 @@
                 <input type="submit" class="btn btn-primary" value="Add Product" id="btn" style="margin-bottom:2%;">
             </form>
         </div>
+        </div>
         <hr class="white">
-        <p class="alert alert-primary" style="font-size:20px;width:20%;min-width:290px;">Existing Products</p>
+        <p style="font-size:20px;width:20%;min-width:290px;"><b>Existing Products</b></p>
         <div style="width:30%;min-width:350px;float:right;margin-right:0.5%;">
                 <form action="/adminsearch" method="POST">
                     <div class="input-group mb-3">
@@ -114,14 +118,33 @@
                 </form>
             </div>
         </div>
-        <div id="table-div" style="width: 95%;">
+        <br><br><br>
+        <div class="container" style="width: 70%;text-align:left;min-width: 470px;">
+            {% for p in products %}
+            <div class="card" style="border: 2px solid grey;">
+                <div class="card-body">
+                    <h5 class="card-title" style="font-size: 20px;"><b>{{p[0]}}. {{p[2]}}</b></h5>
+                    <h6 class="card-subtitle mb-2 text-muted" style="font-size: 18px;">{{p[1]}}</h6>
+                    <p class="card-text"></p>
+                    <p style="float: right;font-size:18px;" class="btn btn-warning"><b>{{getprice(p[1])}}</b></p>
+                </div>
+                <div class="card-footer" style="text-align: right;">
+                    <a href="" class="btn btn-primary" style="font-size: 20px;"><i class="bi bi-eye"></i></a>&ThinSpace;
+                    <a href="/update/{{p[0]}}" class="btn btn-primary" style="font-size: 20px;"><b><i class="bi bi-pen"></i></b></a>&ThinSpace;
+                    <a href="/delete/{{p[0]}}" class="btn btn-primary" style="font-size: 20px;"><b><i class="bi bi-trash"></i></b></a>
+                </div>
+            </div>
+            <br>
+            {% endfor %}
+        </div>
+        <!-- <div id="table-div" style="width: 95%;">
             <table class="table white" style="width: 90%;">
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">ASIN</th>
                     <th scope="col" style="width: 10%;">Name</th>
                     <th scope="col" style="width: 30%;">Description</th>
-                    <!-- <th scope="col">Price ₹</th> -->
+                    <th scope="col">Price ₹</th>
                     <th scope="col" style="width: 15%;">Affiliate Link</th>
                     <th scope="col">Catagory</th>
                     <th scope="col" style="width: 10%;">Image Link</th>
@@ -151,9 +174,9 @@
                     </td>
                 </tr>
                 {% endfor %}
-            </table>
+            </table> 
             <br>
-        </div>
+        </div>-->
         </center>
         <script>
             mybutton = document.getElementById("topbutton");
@@ -176,7 +199,7 @@
             }
 
             function scrollFunction() {
-                if (document.body.scrollTop > 550 || document.documentElement.scrollTop > 550) {
+                if (document.body.scrollTop > 0 || document.documentElement.scrollTop > 0) {
                     mybutton.style.display = "block";
                 } else {
                     mybutton.style.display = "none";
@@ -184,8 +207,8 @@
             }
 
             function topFunction() {
-                document.body.scrollTop = 550;
-                document.documentElement.scrollTop = 550;
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
             }
         </script>
     </body>
