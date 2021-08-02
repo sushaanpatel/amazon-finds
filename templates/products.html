@@ -89,11 +89,10 @@
         </b></button>
         <div class="collapse" id="collapse">
         <p style="font-size: 16px;color:#ff4d4d;">{{err}}</p>
-        <div class="white-div" style="width: 30%;border-radius:5px;min-width:400px;height:385px;" id="link-div">
+        <div class="white-div" style="width: 30%;border-radius:5px;min-width:400px;height:320px;" id="link-div">
             <br>
             <form action="/products" method="POST" style="margin-bottom:3%;" enctype="multipart/form-data">
                 <input type="text" class="form-control" name="asin" id="asin" placeholder="Product Asin" style="margin-bottom:1%;width:85%;">
-                <textarea type="text" class="form-control" name="product-description" id="prod-des" placeholder="Product Description" style="margin-bottom:1%;width:85%;"></textarea>
                 <input type="text" class="form-control" name="amazon-link" id="amaz-link" placeholder="Affiliate Link" style="margin-bottom:1%;width:85%;">
                 <input type="text" class="form-control" name="product-creator" id="prod-creator" placeholder="Product Creator/Seller" style="margin-bottom:1%;width:85%">
                 <input type="text" class="form-control" name="employ-name" id="emp-name" placeholder="Employ Name" style="margin-bottom:1%;width:85%">
@@ -126,10 +125,10 @@
                     <h5 class="card-title" style="font-size: 20px;"><b>{{p[0]}}. {{p[2]}}</b></h5>
                     <h6 class="card-subtitle mb-2 text-muted" style="font-size: 18px;">{{p[1]}}</h6>
                     <p class="card-text"></p>
-                    <p style="float: right;font-size:18px;" class="btn btn-warning"><b>{{getprice(p[1])}}</b></p>
+                    <p style="float: right;font-size:18px;" class="btn btn-warning"><b>{{p[4]}}</b></p>
                 </div>
                 <div class="card-footer" style="text-align: right;">
-                    <a href="" class="btn btn-primary" style="font-size: 20px;"><i class="bi bi-eye"></i></a>&ThinSpace;
+                    <a href="/{{p[1]}}&id={{p[0]}}" class="btn btn-primary" style="font-size: 20px;"><i class="bi bi-eye"></i></a>&ThinSpace;
                     <a href="/update/{{p[0]}}" class="btn btn-primary" style="font-size: 20px;"><b><i class="bi bi-pen"></i></b></a>&ThinSpace;
                     <a href="/delete/{{p[0]}}" class="btn btn-primary" style="font-size: 20px;"><b><i class="bi bi-trash"></i></b></a>
                 </div>

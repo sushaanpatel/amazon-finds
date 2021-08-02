@@ -4,9 +4,22 @@ from datetime import datetime
 from models import app, db2, con, Users
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash
-from scrapper import getall, getprice, getrating, getavail
+from scrapper import getall, updatedb
 from flask import Flask, render_template, request, redirect, url_for
 from flask_login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user
+
+# def getall(asin):
+#     return {
+#         "name":"NA",
+#         "price":"NA",
+#         "image":"NA",
+#         "rating":"NA",
+#         "ratingno":"NA",
+#         "availability":"NA"
+#         }
+
+# def getprice(asin):
+#     return "NA"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -17,6 +30,15 @@ def load_user(user_id):
 @login_manager.unauthorized_handler
 def unauth():
     return redirect('/admin')
+
+db = con.cursor()
+db.execute("SELECT * FROM products")
+x = db.fetchall()
+for i in x:
+    y = updatedb(i[1])
+    rate = round(float(y['rating']))
+    db.execute(f"""UPDATE products SET price = '{y['price']}', availability = '{y['availability']}', rating = '{rate}' WHERE product_id = {i[0]}""")
+    con.commit()
 
 global paserr
 paserr = ""
@@ -35,6 +57,35 @@ fromadminsearch = False
 global fromsearch
 fromsearch = False
 
+def format(unformat):
+    lenght = len(unformat)
+    count = 0
+    formated_list = []
+    while count < lenght:
+        try:
+            temp = []
+            temp.append(unformat[count])
+            temp.append(unformat[count+1])
+            temp.append(unformat[count+2])
+            formated_list.append(temp)
+            count += 3
+        except IndexError:
+            if lenght%3 == 1:
+                x = unformat[::-1]
+                y = []
+                y.append(x[0])
+                formated_list.append(y)
+                count += 3
+            if lenght%3 == 2:
+                x = unformat[::-1]
+                y = []
+                y.append(x[0])
+                y.append(x[1])
+                formated_list.append(y[::-1])
+                count += 3
+    return formated_list
+
+
 @app.route('/logout')
 def logout():
     logout_user()
@@ -44,13 +95,27 @@ def logout():
 def clear():
     global current_page
     global fromadminsearch
+    global fromsearch
     global product_list
     product_list = []
     if current_page == '/products':
         fromadminsearch = False
         return redirect('/products')
+    if current_page == '/':
+        fromsearch = False
+        return redirect('/')
 
-@app.route('/')
+@app.route('/buynow/<int:id>')
+def buynow():
+    con.reconnect()
+    db = con.cursor()
+    db.execute(f"""UPDATE products SET times_clicked + 1 WHERE product_id = "{id}" """)
+    con.commit()
+    db.execute(f"SELECT link FROM products WHERE product_id = '{id}' ")
+    link = db.fetchall()
+    return redirect(f'{link[0][0]}')
+
+@app.route('/', methods = ["POST", "GET"])
 def index():
     global paserr
     paserr = ""
@@ -60,55 +125,43 @@ def index():
     global display_list
     con.reconnect()
     db = con.cursor()
-    if not fromsearch:
+    if fromsearch == False:
+        display_list = []
         db.execute("SELECT * from products")
         product_list = db.fetchall()
-        lenght = len(product_list)
-        count = 0
-        display_list = []
-        while count < lenght:
-            try:
-                temp = []
-                temp.append(product_list[count])
-                temp.append(product_list[count+1])
-                temp.append(product_list[count+2])
-                display_list.append(temp)
-                count += 3
-            except IndexError:
-                if lenght%3 == 1:
-                    x = product_list[::-1]
-                    y = []
-                    y.append(x[0])
-                    display_list.append(y)
-                    count += 3
-                if lenght%3 == 2:
-                    x = product_list[::-1]
-                    y = []
-                    y.append(x[0])
-                    y.append(x[1])
-                    display_list.append(y[::-1])
-                    count += 3
-    return render_template('index.html', display = display_list, prod = product_list, getall = getall)
+        out = format(product_list)
+        for i in out:
+            display_list.append(i)
+    return render_template('index.html', display = display_list, prod = product_list)
+
+@app.route('/<string:asin>&id=<int:id>', methods = ["POST", "GET"])
+def product_page(asin, id):
+    con.reconnect()
+    db = con.cursor()
+    db.execute(f"""SELECT * FROM products WHERE product_id = "{id}" """)
+    product = db.fetchall()
+    return render_template('product-page.html', p = product[0])
 
 @app.route('/search', methods = ["POST", "GET"])
 def search():
     global display_list
     global fromsearch
-    fromsearch = True
+    global current_page
+    current_page = '/'
     if request.method == "POST":
-        keyword = request.form[''].lower()
-        catagory = request.form.get('')
-        if catagory == "All":
-            con.reconnect()
-            db = con.cursor()
-            db.execute(f"""SELECT * FROM products WHERR name LIKE '%{keyword}%'""")
+        display_list = []
+        searchword = request.form['search_bar'].lower()
+        cata = request.form.get('filter')
+        con.reconnect()
+        db = con.cursor()
+        if cata == "all":
+            db.execute(f"SELECT * FROM products WHERE name LIKE '%{searchword}%'")
             query = db.fetchall()
-            query = query[::-1]
-            for i in query:
+            fromsearch = True
+            out = format(query)
+            for i in out:
                 display_list.append(i)
         return redirect('/')
-
-
 
 @app.route('/admin', methods = ["POST", "GET"])
 def admin():
@@ -165,17 +218,20 @@ def add():
             proderr = "Product Not Found"
             return redirect('/products')
         title = product['name']
-        image = product['image']
-        descrip = request.form['product-description']
+        price = product['price']
+        rating = round(float(product['rating']))
+        avail = product['availability']
+        image = str(product['image'])
+        descrip = str(product['descrip'])
         link = request.form['amazon-link']
         catagory = request.form.get('product-cata')
         creator = request.form['product-creator']
         employ_name = request.form['employ-name']
         date = datetime.now()
-        if descrip != "" and link != "" and creator != "" and employ_name != "" and catagory != "-- Select Product Catagory --":
+        if link != "" and creator != "" and employ_name != "" and catagory != "-- Select Product Catagory --":
             con.reconnect()
             db = con.cursor()
-            db.execute(f"""INSERT INTO products(asin, name, description, catagory, link, image, creator, employ_name, date, times_clicked) VALUES("{asin}", "{title}", "{descrip}", "{catagory}", "{link}", "{image}", "{creator}", "{employ_name}", "{date.date()}", 0)""")
+            db.execute(f"""INSERT INTO products(asin, name, description, catagory, link, image, creator, employ_name, date, times_clicked, price, rating, availability) VALUES("{asin}", "{title}", "{descrip}", "{catagory}", "{link}", "{image}", "{creator}", "{employ_name}", "{date.date()}", 0, "{price}", "{rating}", "{avail}")""")
             con.commit()
             return redirect('/products')
         else:
@@ -183,14 +239,14 @@ def add():
             return redirect('/products')
     else:
         if fromadminsearch:
-            return render_template('products.html', products = product_list, err = proderr, getprice = getprice)
+            return render_template('products.html', products = product_list, err = proderr)
         else:
             con.reconnect()
             db = con.cursor()
             db.execute("SELECT * from products")
             product_list = db.fetchall()
             product_list = product_list[::-1]
-            return render_template('products.html', products = product_list, err = proderr, getprice = getprice)
+            return render_template('products.html', products = product_list, err = proderr)
 
 @app.route('/delete/<int:prod_id>')
 def delete(prod_id):
@@ -237,6 +293,4 @@ def update(prod_id):
 if __name__ == "__main__":
     app.run(debug=True)
 
-# x = Users(password = "1234")
-# db2.session.add(x)
-# db2.session.commit()
+# db = con.cursor()
