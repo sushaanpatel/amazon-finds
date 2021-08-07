@@ -1,29 +1,36 @@
 from scraper_api import ScraperAPIClient
 import requests
-import random
 
 client = ScraperAPIClient("436adc828f9976294474601d9e26c625")
     
 def getall(asin):
     out = {}
     rq = client.get(url = f'https://www.amazon.in/dp/{asin}', autoparse = True).json()
-    # text = ""
-    # text1 = ""
-    # for i in range(len(rq['image'])):
-    #     if i == 0:
-    #         text = rq['image'][i]
-    #     else:
-    #         text = text + rq['image'][i] + ","
-    # x = rq['small_description'].split('\n')
-    # for i in range(len(x)):
-    #     if i == 0:
-    #         text1 = x[i]
-    #     else:
-    #         text1 = text1 + x[i] + ","
+    text = ""
+    a = rq['images']
+    for i in a:
+        if text == "":
+            text = i
+        else:
+            text = text + f",{i}"
+    text1 = ""
+    b = rq['small_description'].split('\n')
+    del b[0]
+    if len(b) > 5:
+        count = len(b) - 1
+        while count > 5:
+            del b[count]
+            count = count - 1
+        del b[5]
+    for y in b:
+        if text1 == "":
+            text1 = y
+        else:
+            text1 = text1 + f"~{y}"
     out['name'] = rq['name']
     out['price'] = rq['pricing'].split('.')[0]
     out['image'] = text
-    out['descrip'] = rq['small_description'].split('\n')
+    out['descrip'] = text1
     out['rating'] = str(rq['average_rating'])
     out['availability'] = rq['availability_status'].split(',')[0]
     return out
@@ -35,5 +42,3 @@ def updatedb(asin):
     out['rating'] = str(rq['average_rating'])
     out['availability'] = rq['availability_status'].split(',')[0]
     return out
-
-# print(getall('B095PYTSV8'))

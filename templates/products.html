@@ -84,11 +84,11 @@
         <a href="/logout" class="btn btn-danger" style="float: left;margin:4px;">Log-out</a>
         <button id="topbutton" class="btn btn-dark" onclick="topFunction()"><i style="font-size:30px;" class="bi bi-arrow-bar-up"></i></button>
         <br><br>
-        <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#collapse" aria-expanded="false" aria-controls="collapse" style="font-size: 20px;"><b>
+        <button class="btn btn-primary" data-bs-toggle="collapse" data-bs-target="#collapse" aria-expanded="false" aria-controls="collapse" style="font-size: 20px;margin-bottom:1%;"><b>
             Add Product
         </b></button>
-        <div class="collapse" id="collapse">
         <p style="font-size: 16px;color:#ff4d4d;">{{err}}</p>
+        <div class="collapse" id="collapse">
         <div class="white-div" style="width: 30%;border-radius:5px;min-width:400px;height:320px;" id="link-div">
             <br>
             <form action="/products" method="POST" style="margin-bottom:3%;" enctype="multipart/form-data">
@@ -122,9 +122,11 @@
             {% for p in products %}
             <div class="card" style="border: 2px solid grey;">
                 <div class="card-body">
-                    <h5 class="card-title" style="font-size: 20px;"><b>{{p[0]}}. {{p[2]}}</b></h5>
+                    <h5 class="card-title" style="font-size: 20px;"><b>{{p[0]}}. {{p[2]}} <h5 style="float: right;">{{p[12]}}</h5></b></h5>
                     <h6 class="card-subtitle mb-2 text-muted" style="font-size: 18px;">{{p[1]}}</h6>
-                    <p class="card-text"></p>
+                    <b>Product {{p[9]}}</b><br>
+                        Uploaded By - {{p[11]}}<br>
+                        Times Clicked - {{p[13]}}<br>
                     <p style="float: right;font-size:18px;" class="btn btn-warning"><b>{{p[4]}}</b></p>
                 </div>
                 <div class="card-footer" style="text-align: right;">

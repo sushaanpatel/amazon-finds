@@ -86,14 +86,72 @@
         <br><br>
         <div class="container-fluid" style="width: 95%;">
             <div class="row">
-                <div class="col-5">
-                    <img src="{{p[6]}}" alt="{{p[2]}}" class="rounded">
+                <div class="col-5" style="min-width: 500px;margin-bottom:6.5%;">
+                    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                          <div class="carousel-item active">
+                            <img src="{{p[7].split(',')[0]}}" class="rounded d-block w-100">
+                          </div>
+                          <div class="carousel-item">
+                            <img src="{{p[7].split(',')[3]}}" class="rounded d-block w-100">
+                          </div>
+                          <div class="carousel-item">
+                            <img src="{{p[7].split(',')[2]}}" class="rounded d-block w-100">
+                          </div>
+
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+                          <span class="bi bi-chevron-left" style="color: black;font-size:30px;" aria-hidden="true"></span>
+                          <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button  class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+                          <span class="bi bi-chevron-right" style="color: black;font-size:30px;"aria-hidden="true"></span>
+                          <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="col-5">
-                    
+                <div class="col-5" style="margin-bottom:6.5%;">
+                    <h5><b>{{p[2]}}</b></h5>
+                    <p style="font-size:17px;">
+                        Sold By - {{p[10]}}<br>
+                        Catagory - {{p[5]}}
+                    </p>
+                    <p class="btn btn-warning"><b>Current Price - {{p[4]}}</b></p>
+                    <br>
+                    <p style="font-size: 18px;"><b>About this Item</b></p>
+                    <ul>
+                    {% for i in p[3].split('~') %}
+                    <li>{{i}}</li>
+                    {% endfor %}
+                    </ul>
                 </div>
-                <div class="col-2">
-                    
+                <div class="col" style="margin-bottom:6.5%;">
+                    <center>
+                    <div class="white-div" style="border-radius: 5px;width:100%;height:50%;">
+                        <br>
+                        <p style="font-size:25px;"><b>{{p[4]}}</b></p>
+                        {% if p[9].split(' ')[0] == 'In' %}
+                        <p style="color:#13e600;font-size:25px;"><b>{{p[9]}}</b></p>
+                        {% else %}
+                        <p style="color:#ff4d4d;font-size:25px"><b>{{p[9]}}</b></p>
+                        {% endif %}
+                        {% if p[8] == "1" %}
+                        <p class="card-text" style="font-size: 22px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i></p>
+                        {% elif p[8] == "2" %}
+                        <p class="card-text" style="font-size: 22px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i></p>
+                        {% elif p[8] == "3" %}
+                        <p class="card-text" style="font-size: 22px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i></p>
+                        {% elif p[8] == "4" %}
+                        <p class="card-text" style="font-size: 22px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i></p>
+                        {% elif p[8] == "5" %}
+                        <p class="card-text" style="font-size: 22px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i></p>
+                        {% elif p[8] == "0" %}
+                        <p class="card-text" style="font-size: 18px;"><span style="text-decoration: none;">No Ratings</span></p>
+                        {% endif %}
+                        <a href="/buynow/{{p[0]}}" class="btn btn-info" style="border-radius: 10px;color:white;font-size:20px;">Buy Now</a>
+                        <br>
+                    </div>
+                    </center>
                 </div>
             </div>
         </div>

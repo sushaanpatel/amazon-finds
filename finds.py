@@ -1,4 +1,5 @@
 import os
+import webbrowser
 import mysql.connector
 from datetime import datetime
 from models import app, db2, con, Users
@@ -85,7 +86,6 @@ def format(unformat):
                 count += 3
     return formated_list
 
-
 @app.route('/logout')
 def logout():
     logout_user()
@@ -106,14 +106,22 @@ def clear():
         return redirect('/')
 
 @app.route('/buynow/<int:id>')
-def buynow():
+def buynow(id):
+    global current_page
     con.reconnect()
     db = con.cursor()
-    db.execute(f"""UPDATE products SET times_clicked + 1 WHERE product_id = "{id}" """)
+    db.execute(f"SELECT times_clicked FROM products WHERE product_id = {id}")
+    x = db.fetchall()[0][0]
+    x += 1
+    db.execute(f"""UPDATE products SET times_clicked = {x} WHERE product_id = {id} """)
     con.commit()
-    db.execute(f"SELECT link FROM products WHERE product_id = '{id}' ")
+    db.execute(f"SELECT link FROM products WHERE product_id = {id} ")
     link = db.fetchall()
-    return redirect(f'{link[0][0]}')
+    webbrowser.open_new_tab(f'{link[0][0]}')
+    if current_page == '/':
+        return redirect('/')
+    if current_page == '/productpage':
+        return "",204
 
 @app.route('/', methods = ["POST", "GET"])
 def index():
@@ -123,6 +131,8 @@ def index():
     proderr = ""
     global product_list
     global display_list
+    global current_page
+    current_page = '/'
     con.reconnect()
     db = con.cursor()
     if fromsearch == False:
@@ -136,6 +146,8 @@ def index():
 
 @app.route('/<string:asin>&id=<int:id>', methods = ["POST", "GET"])
 def product_page(asin, id):
+    global current_page
+    current_page = '/productpage'
     con.reconnect()
     db = con.cursor()
     db.execute(f"""SELECT * FROM products WHERE product_id = "{id}" """)

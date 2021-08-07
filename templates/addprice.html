@@ -1,0 +1,75 @@
+<html>
+    <head>
+        <title>Update Price</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Ubuntu&family=Work+Sans:wght@400;900&display=swap');
+            .dark{
+                background-color: #222222;
+                font-family: 'Open Sans', sans-serif;
+                color: whitesmoke;
+            }
+            .white{
+                background-color: whitesmoke;
+                font-family: 'Open Sans', sans-serif;
+                color: #222222;
+            }
+            .dark-div{
+                background-color:#323232;
+            }
+            .white-div{
+                background-color: #cfcfcf;
+            }
+            input.form-control.dark {
+                background-color:#202020;
+                color: white;
+                border: #202020;
+            }
+            input.form-control.white {
+                background-color:#e9e9e9;
+                color: black;
+            }
+            .nav-bg{
+                background-color:#001f2a;
+            }
+            #topbutton{
+                display: none;
+                position: fixed;
+                bottom: 20px;
+                right: 30px;
+                z-index: 99;
+                font-size: 18px;
+                border: none;
+                outline: none;
+                border-radius: 20px;
+                padding-top: 8px;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-bottom: 6px;
+            }
+            .gridcard{
+                margin-bottom: 6.5%;
+            }
+        </style>
+    </head>
+    <body class="white">
+        <div class="white-div" style="width: 30%;border-radius:5px;min-width:400px;height:25%;margin-top:25%">
+            <form action="/updateprice/{{p[0]}}" method="post">
+                <div class="input-group mb-3">
+                    <span class="input-group-text">₹</span>
+                    <input type="text" class="form-control" name="price" placeholder="Price, Separate by Comma" style="margin-bottom:1%;width:85%;">
+                </div>
+                <input type="submit" value="Update Price" class="btn btn-primary">
+            </form>
+        </div>
+    </body>
+</html>

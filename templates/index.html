@@ -106,26 +106,28 @@
             <div class="row">
                 {% for o in i %}
                 <div class="col">
-                    <a href="/{{o[1]}}&id={{o[0]}}"><div class="card" style="margin-bottom: 6.5%; height:500px;background-color:#cfcfcf;">
+                    <a href="/{{o[1]}}&id={{o[0]}}"><div class="card" style="margin-bottom: 6.5%; height:500px;background-color:#cfcfcf;border:0px;">
                         <center>
                         <img src="{{o[7].split(',')[0]}}" height="260px" width="260px" alt="" style="margin-top: 5%;">
                         </center>
                         <div class="card-body">
                             <p class="card-title" style="font-size:18px;"><b>{{o[2]}}</b></p>
-                            {% if o[8] == 1 %}
+                            {% if o[8] == "1" %}
                             <p class="card-text" style="font-size: 18px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i></p>
-                            {% elif o[8] == 2 %}
+                            {% elif o[8] == "2" %}
                             <p class="card-text" style="font-size: 18px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i></p>
-                            {% elif o[8] == 3 %}
+                            {% elif o[8] == "3" %}
                             <p class="card-text" style="font-size: 18px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i></p>
-                            {% elif o[8] == 4 %}
+                            {% elif o[8] == "4" %}
                             <p class="card-text" style="font-size: 18px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i></p>
-                            {% elif o[8] == 5 %}
+                            {% elif o[8] == "5" %}
                             <p class="card-text" style="font-size: 18px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i></p>
+                            {% elif o[8] == "0" %}
+                            <p class="card-text" style="font-size: 18px;"><span class="text">No Ratings</span></p>
                             {% endif %}
                             <p class="card-text" style="font-size: 18px;"></p>
                             <p style="font-size: 18px;" class="btn btn-warning"><i>{{o[4]}}</i></p>
-                            <a href="" class="btn btn-primary" style="float: right;margin-right:4%;font-size:18px;"><b>Buy Now</b></a>
+                            <a href="/buynow/{{o[0]}}" class="btn btn-primary" style="float: right;margin-right:4%;font-size:18px;"><b>Buy Now</b></a>
                         </div>
                     </div></a>
                 </div>
