@@ -1,14 +1,13 @@
 <html>
     <head>
         <title>Amazon Finds - Products</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../static/alert-css/style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
         <style>
@@ -98,7 +97,12 @@
                 <input type="text" class="form-control" name="employ-name" id="emp-name" placeholder="Employ Name" style="margin-bottom:1%;width:85%">
                 <select name="product-cata" id="catagory" class="form-select" style="margin-bottom:1%;width:85%;">
                     <option value="none">-- Select Product Catagory --</option>
-                    <option value="Kichten">Kichten</option>
+                    <option value="Home/Kichten">Home/Kichten</option>
+                    <option value="Home/Bathroom">Home/Bathroom</option>
+                    <option value="Elder/Cushions">Elder/Cushions</option>
+                    <option value="Elder/Accupenture">Elder/Accupenture</option>
+                    <option value="Electronics/Mobile">Electronics/Mobile</option>
+                    <option value="Electronics/Laptop">Electronics/Laptop</option>
                 </select>
                 <br>
                 <input type="submit" class="btn btn-primary" value="Add Product" id="btn" style="margin-bottom:2%;">
@@ -125,12 +129,18 @@
                     <h5 class="card-title" style="font-size: 20px;"><b>{{p[0]}}. {{p[2]}} <h5 style="float: right;">{{p[12]}}</h5></b></h5>
                     <h6 class="card-subtitle mb-2 text-muted" style="font-size: 18px;">{{p[1]}}</h6>
                     <b>Product {{p[9]}}</b><br>
-                        Uploaded By - {{p[11]}}<br>
-                        Times Clicked - {{p[13]}}<br>
+                    Uploaded By - {{p[11]}}<br>
+                    Times Clicked - {{p[13]}}<br>
+                    Affiliate Link - <a href="{{p[6]}}" target="_blank">{{p[6]}}</a><br>
+                    {% if p[4] == 'NA'%}
+                    <p style="float: right;font-size:18px;" class="btn btn-warning"><b><a href="/updateprice/{{p[0]}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Price Not Available, Update it Manually by clicking on the text">{{p[4]}}</a></b></p>
+                    {% else %}
                     <p style="float: right;font-size:18px;" class="btn btn-warning"><b>{{p[4]}}</b></p>
+                    {% endif %}
                 </div>
                 <div class="card-footer" style="text-align: right;">
-                    <a href="/{{p[1]}}&id={{p[0]}}" class="btn btn-primary" style="font-size: 20px;"><i class="bi bi-eye"></i></a>&ThinSpace;
+                    <a href="/product/id={{p[0]}}" class="btn btn-primary" style="font-size: 20px;"><i class="bi bi-eye"></i></a>&ThinSpace;
+                    <a href="/updateprice/{{p[0]}}" class="btn btn-primary" style="font-size: 20px;" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit Price"><b><i class="bi bi-cash"></i></b></a>&ThinSpace;
                     <a href="/update/{{p[0]}}" class="btn btn-primary" style="font-size: 20px;"><b><i class="bi bi-pen"></i></b></a>&ThinSpace;
                     <a href="/delete/{{p[0]}}" class="btn btn-primary" style="font-size: 20px;"><b><i class="bi bi-trash"></i></b></a>
                 </div>
@@ -138,47 +148,18 @@
             <br>
             {% endfor %}
         </div>
-        <!-- <div id="table-div" style="width: 95%;">
-            <table class="table white" style="width: 90%;">
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">ASIN</th>
-                    <th scope="col" style="width: 10%;">Name</th>
-                    <th scope="col" style="width: 30%;">Description</th>
-                    <th scope="col">Price ₹</th>
-                    <th scope="col" style="width: 15%;">Affiliate Link</th>
-                    <th scope="col">Catagory</th>
-                    <th scope="col" style="width: 10%;">Image Link</th>
-                    <th scope="col">Times Clicked</th>
-                    <th scope="col">Creator/Seller</th>
-                    <th scope="col">Employ Name</th>
-                    <th scope="col">Date Added</th>
-                    <th scope="col"></th>
-                </tr>
-                {% for p in products %}
-                <tr>
-                    <th scope="row">{{p[0]}}</th>
-                    <td>{{p[1]}}</td>
-                    <td>{{p[2]}}</td>
-                    <td><pre class="white">{{p[3]}}</pre></td>
-                    <td style="word-break:break-all;"><a href="{{p[4]}}" target="_blank">{{p[5]}}</a></td>
-                    <td>{{p[4]}}</td>
-                    <td style="word-break: break-all;"><a href="{{p[6]}}" target="_blank">{{p[6]}}</a></td>
-                    <td>{{p[10]}}</td>
-                    <td>{{p[7]}}</td>
-                    <td>{{p[8]}}</td>
-                    <td>{{p[9]}}</td>
-                    <td>
-                        <a href="/update/{{p[0]}}">Update</a>
-                        <br>
-                        <a href="/delete/{{p[0]}}">Delete</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </table> 
-            <br>
-        </div>-->
         </center>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for x in messages %}
+                {% if x == '1' %}
+                <script>
+                    alert('Opps! Price Not Available, Please Update Manually by clicking on the "NA" price')
+                </script>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
         <script>
             mybutton = document.getElementById("topbutton");
             window.onscroll = function(){save_scroll(),scrollFunction()};

@@ -1,11 +1,13 @@
 <html>
     <head>
         <title>Amazon Finds</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
@@ -63,7 +65,7 @@
     </head>
     <body class="white">
         <nav class="navbar navbar-expand-lg navbar-dark nav-bg" id="navbar">
-            <a class="navbar-brand" href="/"><b><img src="static/icons/white-plane-small.png">Amazon Finds</b></a>
+            <a class="navbar-brand" href="/"><b><img src="../static/icons/white-plane-small.png">Amazon Finds</b></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="margin-right: 10px;" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
@@ -86,7 +88,7 @@
         <br><br>
         <div class="container-fluid" style="width: 95%;">
             <div class="row">
-                <div class="col-5" style="min-width: 500px;margin-bottom:6.5%;">
+                <div class="col-5" style="min-width: 500px;margin:auto;overflow:auto;margin-top:0;margin-bottom:6.5%;">
                     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
                           <div class="carousel-item active">
@@ -101,16 +103,16 @@
 
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                          <span class="bi bi-chevron-left" style="color: black;font-size:30px;" aria-hidden="true"></span>
+                          <b><span class="bi bi-chevron-left" style="color: black;font-size:30px;" aria-hidden="true"></span></b>
                           <span class="visually-hidden">Previous</span>
                         </button>
                         <button  class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                          <span class="bi bi-chevron-right" style="color: black;font-size:30px;"aria-hidden="true"></span>
+                        <b><span class="bi bi-chevron-right" style="color: black;font-size:30px;"aria-hidden="true"></span></b>
                           <span class="visually-hidden">Next</span>
                         </button>
                     </div>
                 </div>
-                <div class="col-5" style="margin-bottom:6.5%;">
+                <div class="col-5" style="margin-bottom:6.5%;min-width:470px;text-align:left;">
                     <h5><b>{{p[2]}}</b></h5>
                     <p style="font-size:17px;">
                         Sold By - {{p[10]}}<br>
@@ -118,22 +120,23 @@
                     </p>
                     <p class="btn btn-warning"><b>Current Price - {{p[4]}}</b></p>
                     <br>
-                    <p style="font-size: 18px;"><b>About this Item</b></p>
+                    <p style="font-size: 20px;"><b>About this Item</b></p>
                     <ul>
                     {% for i in p[3].split('~') %}
-                    <li>{{i}}</li>
+                    <li style="font-size: 19px;">{{i}}</li>
                     {% endfor %}
                     </ul>
                 </div>
-                <div class="col" style="margin-bottom:6.5%;">
+                <div class="col" style="margin-bottom:6.5%;min-width:180px;">
                     <center>
-                    <div class="white-div" style="border-radius: 5px;width:100%;height:50%;">
+                    <div class="white-div" style="border-radius: 5px;width:100%;height:max-content;">
+                        <div>
                         <br>
-                        <p style="font-size:25px;"><b>{{p[4]}}</b></p>
+                        <p style="font-size:25px;margin:4px;"><b>{{p[4]}}</b></p>
                         {% if p[9].split(' ')[0] == 'In' %}
-                        <p style="color:#13e600;font-size:25px;"><b>{{p[9]}}</b></p>
+                        <p style="color:#13e600;font-size:25px;margin:4px;"><b>{{p[9]}}</b></p>
                         {% else %}
-                        <p style="color:#ff4d4d;font-size:25px"><b>{{p[9]}}</b></p>
+                        <p style="color:#ff4d4d;font-size:25px;margin:4px;"><b>{{p[9]}}</b></p>
                         {% endif %}
                         {% if p[8] == "1" %}
                         <p class="card-text" style="font-size: 22px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i></p>
@@ -146,10 +149,11 @@
                         {% elif p[8] == "5" %}
                         <p class="card-text" style="font-size: 22px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star-fill" style="color: yellow;"></i></p>
                         {% elif p[8] == "0" %}
-                        <p class="card-text" style="font-size: 18px;"><span style="text-decoration: none;">No Ratings</span></p>
+                        <p class="card-text" style="font-size: 18px;"><b>No Ratings</b></p>
                         {% endif %}
-                        <a href="/buynow/{{p[0]}}" class="btn btn-info" style="border-radius: 10px;color:white;font-size:20px;">Buy Now</a>
+                        <a href="/buynow/{{p[0]}}" class="btn btn-info" style="border-radius: 10px;color:white;font-size:20px;margin-bottom: 20px;"><b>Buy Now <i class="fa fa-amazon"></i></b></a>
                         <br>
+                        </div>
                     </div>
                     </center>
                 </div>
