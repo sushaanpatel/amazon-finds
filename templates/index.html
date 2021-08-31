@@ -28,7 +28,7 @@
                 background-color: #cfcfcf;
             }
             input.form-control.dark {
-                background-color:#202020;
+                background-color:#424242;
                 color: white;
                 border: #202020;
             }
@@ -54,29 +54,27 @@
                 padding-right: 10px;
                 padding-bottom: 6px;
             }
-            .gridcard{
-                margin-bottom: 6.5%;
-            }
         </style>
     </head>
     <body class="white">
         <nav class="navbar navbar-expand-lg navbar-dark nav-bg" id="navbar">
-            <a class="navbar-brand" href="/"><b><img src="static/icons/white-plane-small.png">Amazon Finds</b></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" style="margin-right: 10px;" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="/"><b><img src="static/icons/white-plane-small.png">Amazon Finds</b></a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
-              <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                   <li class="nav-item">
-                    <a class="nav-link" href="#" style="margin-left: 4px;">About Us</a>
+                    <a class="nav-link active" style="font-size: 18px;" href="#">About us</a>
                   </li>
-                  <!-- <li>
-                    <div class="form-check form-switch" style="margin-top: 6px;margin-left:8px;">
-                        <label></label>
-                        <input type="checkbox" onclick="theme()" style="font-size: 18px;" class="form-check-input">
-                    </div>
-                  </li> -->
                 </ul>
+                <div class="d-flex">
+                    <div class="form-check form-switch" style="margin-left:4px;margin-right:8px;">
+                        <label for="in" style="color:white;font-size:18px;">Dark Mode</label>
+                        <input type="checkbox" id="in" onclick="theme()" style="font-size: 18px;" class="form-check-input">
+                    </div>
+                </div>
               </div>
             </div>
         </nav>
@@ -91,7 +89,7 @@
                         <option value="elderassist">Elder Assistance</option>
                         <option value="elect">Electronic</option>
                     </select>
-                    <input type="text" class="form-control" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
+                    <input type="text" class="form-control white" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
                     <input type="submit" value="Search" class="btn btn-primary" style="font-size: 18px;">
                     <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 18px;">Clear</a>
                 </div>
@@ -104,7 +102,7 @@
             <div class="row">
                 {% for o in i %}
                 <div class="col">
-                    <a href="/product/id={{o[0]}}"><div class="card" style="margin-bottom: 6.5%; height:500px;background-color:#cfcfcf;border:0px;">
+                    <a href="/product/id={{o[0]}}"><div class="card white-div" id="div" style="margin-bottom: 6.5%; height:500px;border:0px;">
                         <center>
                         <img src="{{o[7].split(',')[0]}}" height="260px" alt="{{o[2]}}" style="margin-top: 5%;" class="rounded">
                         </center>
@@ -138,6 +136,29 @@
             mybutton = document.getElementById("topbutton");
             window.onscroll = function() {scrollFunction()};
 
+            function theme(){
+                var body = document.body;
+                var card_div = document.querySelectorAll('.white-div')
+                var buttons = document.querySelectorAll('.btn btn-dark')
+                if (body.className == "white"){
+                    body.className = 'dark'
+                    for (var i = 0;i<card_div.length;i++){
+                        card_div[i].className = "card dark-div"
+                    }
+                    for (var i = 0;i<buttons.length;i++){
+                        buttons[i].className = "btn btn-light"
+                    }
+                } else {
+                    body.className = 'white'
+                    for (var i = 0;i<card_div.length;i++){
+                        card_div[i].className = "card white-div"
+                    }
+                    for (var i = 0;i<buttons.length;i++){
+                        buttons[i].className = "btn btn-dark"
+                    }
+                }
+            }
+
             function scrollFunction() {
                 if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
                     mybutton.style.display = "block";
@@ -154,8 +175,7 @@
             function changesearch(){
                 var div = document.getElementById('search_div');
                 var fil = document.getElementById('filter').value;
-                switch (fil){
-                    case 'homeapp':
+                if (fil == "homeapp"){
                     div.innerHTML = 
                     `
                     <form action="/search" method="POST">
@@ -176,8 +196,8 @@
                           </div>
                     </form>
                     `;
-                    break;
-                    case 'elderassist':
+                }
+                if (fil == "elderassist"){
                     div.innerHTML = 
                     `
                     <form action="/search" method="POST">
@@ -198,8 +218,8 @@
                           </div>
                     </form>
                     `;
-                    break;
-                    case 'elect':
+                }
+                if (fil == "elect"){
                     div.innerHTML = 
                     `
                     <form action="/search" method="POST">
@@ -221,8 +241,8 @@
                           </div>
                     </form>
                     `;
-                    break;
-                    case 'all':
+                }
+                /*if (fil == "all"){
                     div.innerHTML =
                     `
                     <form action="/search" method="POST">
@@ -239,8 +259,7 @@
                         </div>
                     </form>
                     `;
-                    break;
-                }
+                }*/
             }
         </script>
     </body>

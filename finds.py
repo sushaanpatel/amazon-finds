@@ -9,19 +9,6 @@ from scrapper import getall, updatedb
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user
 
-# def getall(asin):
-#     return {
-#         "name":"NA",
-#         "price":"NA",
-#         "image":"NA",
-#         "rating":"NA",
-#         "ratingno":"NA",
-#         "availability":"NA"
-#         }
-
-# def getprice(asin):
-#     return "NA"
-
 login_manager = LoginManager()
 login_manager.init_app(app)
 @login_manager.user_loader
@@ -32,17 +19,18 @@ def load_user(user_id):
 def unauth():
     return redirect('/admin')
 
-db = con.cursor()
-db.execute("SELECT * FROM products")
-x = db.fetchall()
-for i in x:
-    y = updatedb(i[1])
-    rate = round(float(y['rating']))
-    if y['price'] != '':
-        db.execute(f"""UPDATE products SET price = '{y['price']}', availability = "{y['availability']}", rating = '{rate}' WHERE product_id = {i[0]}""")
-    else:
-        db.execute(f"""UPDATE products SET availability = "{y['availability']}", rating = '{rate}' WHERE product_id = {i[0]}""")
-    con.commit()
+# con.reconnect()
+# db = con.cursor()
+# db.execute("SELECT * FROM products")
+# x = db.fetchall()
+# for i in x:
+#     y = updatedb(i[1])
+#     rate = round(float(y['rating']))
+#     if y['price'] != '':
+#         db.execute(f"""UPDATE products SET price = '{y['price']}', availability = "{y['availability']}", rating = '{rate}' WHERE product_id = {i[0]}""")
+#     else:
+#         db.execute(f"""UPDATE products SET availability = "{y['availability']}", rating = '{rate}' WHERE product_id = {i[0]}""")
+#     con.commit()
 
 global paserr
 paserr = ""
@@ -302,29 +290,43 @@ def update(prod_id):
     global uperr
     if request.method == "POST":
         asin = request.form['asin'].upper()
-        try:
-            product = getall(asin)
-        except:
-            uperr = "Product Not Found"
-            return redirect(f'/update/{prod_id}')
-        title = product['name'].replace('"', "'")
-        price = product['price']
-        rating = round(float(product['rating']))
-        avail = product['availability']
-        image = str(product['image'])
-        descrip = str(product['descrip']).replace('"', "'")
-        link = request.form['amazon-link']
-        catagory = request.form.get('product-cata')
-        creator = request.form['product-creator']
-        employ_name = request.form['employ-name']
-        date = datetime.now()
+        con.reconnect()
+        db = con.cursor()
+        db.execute(f"SELECT * FROM products WHERE product_id = {prod_id}")
+        p = db.fetchall()[0]
+        if asin != p[1]:
+            try:
+                product = getall(asin)
+            except:
+                uperr = "Product Not Found"
+                return redirect(f'/update/{prod_id}')
+            title = product['name'].replace('"', "'")
+            price = product['price']
+            rating = round(float(product['rating']))
+            avail = product['availability']
+            image = str(product['image'])
+            descrip = str(product['descrip']).replace('"', "'")
+            link = request.form['amazon-link']
+            catagory = request.form.get('product-cata')
+            creator = request.form['product-creator']
+            employ_name = request.form['employ-name']
+            date = datetime.now()
+        else:
+            link = request.form['amazon-link']
+            catagory = request.form.get('product-cata')
+            creator = request.form['product-creator']
+            employ_name = request.form['employ-name']
+            date = datetime.now()
         if asin != "" and link != "" and creator != "" and employ_name != "" and catagory != "none":
             con.reconnect()
             db = con.cursor()
-            if price == '':
-                db.execute(f"""UPDATE products SET asin = "{asin}", name = "{title}", description = "{descrip}", catagory = "{catagory}", link = "{link}", image = "{image}", creator = "{creator}", employ_name = "{employ_name}", date = "{date.date()}", availability = "{avail}", rating = {rating} WHERE product_id = "{prod_id}" """)
+            if asin != p[1]:
+                if price == '':
+                    db.execute(f"""UPDATE products SET asin = "{asin}", name = "{title}", description = "{descrip}", catagory = "{catagory}", link = "{link}", image = "{image}", creator = "{creator}", employ_name = "{employ_name}", date = "{date.date()}", availability = "{avail}", rating = {rating} WHERE product_id = "{prod_id}" """)
+                else:
+                    db.execute(f"""UPDATE products SET asin = "{asin}", name = "{title}", description = "{descrip}", catagory = "{catagory}", link = "{link}", image = "{image}", creator = "{creator}", employ_name = "{employ_name}", date = "{date.date()}", price = "{price}", availability = "{avail}", rating = {rating} WHERE product_id = "{prod_id}" """)
             else:
-                db.execute(f"""UPDATE products SET asin = "{asin}", name = "{title}", description = "{descrip}", catagory = "{catagory}", link = "{link}", image = "{image}", creator = "{creator}", employ_name = "{employ_name}", date = "{date.date()}", price = "{price}", availability = "{avail}", rating = {rating} WHERE product_id = "{prod_id}" """)
+                db.execute(f"""UPDATE products SET catagory = "{catagory}", link = "{link}", creator = "{creator}", employ_name = "{employ_name}", date = "{date.date()}" WHERE product_id = "{prod_id}" """)
             con.commit()
             return redirect('/products')
         else:

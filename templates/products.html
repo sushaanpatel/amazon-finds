@@ -110,7 +110,7 @@
         </div>
         </div>
         <hr class="white">
-        <p style="font-size:20px;width:20%;min-width:290px;"><b>Existing Products</b></p>
+        <p style="font-size:20px;"><b>Existing Products</b></p>
         <div style="width:30%;min-width:350px;float:right;margin-right:0.5%;">
                 <form action="/adminsearch" method="POST">
                     <div class="input-group mb-3">
@@ -131,6 +131,7 @@
                     <b>Product {{p[9]}}</b><br>
                     Uploaded By - {{p[11]}}<br>
                     Times Clicked - {{p[13]}}<br>
+                    Catagory - {{p[5]}}<br>
                     Affiliate Link - <a href="{{p[6]}}" target="_blank">{{p[6]}}</a><br>
                     {% if p[4] == 'NA'%}
                     <p style="float: right;font-size:18px;" class="btn btn-warning"><b><a href="/updateprice/{{p[0]}}" data-bs-toggle="tooltip" data-bs-placement="top" title="Price Not Available, Update it Manually by clicking on the text">{{p[4]}}</a></b></p>
