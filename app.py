@@ -1,6 +1,6 @@
 import os
 import webbrowser
-import mysql.connector
+import mysql.connecto
 from datetime import datetime
 from models import app, db2, con, Users
 from flask_sqlalchemy import SQLAlchemy
