@@ -9,6 +9,7 @@ Jinja2==3.0.1
 MarkupSafe==2.0.1
 mysql-connector-python==8.0.26
 protobuf==3.17.3
+python-dotenv==0.19.0
 scraperapi-sdk==0.2.2
 six==1.16.0
 SQLAlchemy==1.4.23

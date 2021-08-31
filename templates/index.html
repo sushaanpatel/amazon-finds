@@ -98,6 +98,9 @@
         </center>
         <br>
         <div class="container">
+            {% if display == [] %}
+            <h1>No Posts Found</h1>
+            {% else %}
             {% for i in display %}
             <div class="row">
                 {% for o in i %}
@@ -130,6 +133,7 @@
                 {% endfor %}
             </div>
             {% endfor %}
+            {% endif %}
         </div>
         <br>
         <script>

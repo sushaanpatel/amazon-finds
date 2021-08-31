@@ -1,7 +1,11 @@
+import os
+import dotenv
 from scraper_api import ScraperAPIClient
 import requests
 
-client = ScraperAPIClient("436adc828f9976294474601d9e26c625")
+dotenv.load_dotenv()
+api = os.environ.get('APIKEY')
+client = ScraperAPIClient(api)
     
 def getall(asin):
     out = {}

@@ -186,7 +186,7 @@ def admin():
     product_list = []
     if request.method == "POST":
         password = request.form['password']
-        passfromdb = Users.query.filter_by(password = "1234").first()
+        passfromdb = Users.query.filter_by(id = "5").first()
         if password == passfromdb.password:
             login_user(passfromdb)
             return redirect('/products')

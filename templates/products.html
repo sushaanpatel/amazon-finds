@@ -123,6 +123,9 @@
         </div>
         <br><br><br>
         <div class="container" style="width: 70%;text-align:left;min-width: 470px;">
+            {% if products == [] %}
+            <h1>No Products Found</h1>
+            {% else %}
             {% for p in products %}
             <div class="card" style="border: 2px solid grey;">
                 <div class="card-body">
@@ -148,6 +151,7 @@
             </div>
             <br>
             {% endfor %}
+            {% endif %}
         </div>
         </center>
         {% with messages = get_flashed_messages() %}
