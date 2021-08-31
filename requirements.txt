@@ -11,10 +11,10 @@ idna==3.2
 itsdangerous==2.0.1
 Jinja2==3.0.1
 MarkupSafe==2.0.1
-mysql==0.0.3
 mysql-connector-python==8.0.26
 mysqlclient==2.0.3
 protobuf==3.17.3
+PyMySQL==1.0.2
 python-dotenv==0.19.0
 requests==2.26.0
 scraperapi-sdk==0.2.2
