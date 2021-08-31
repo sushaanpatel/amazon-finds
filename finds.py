@@ -53,28 +53,31 @@ def format(unformat):
     lenght = len(unformat)
     count = 0
     formated_list = []
-    while count < lenght:
-        try:
-            temp = []
-            temp.append(unformat[count])
-            temp.append(unformat[count+1])
-            temp.append(unformat[count+2])
-            formated_list.append(temp)
-            count += 3
-        except IndexError:
-            if lenght%3 == 1:
-                x = unformat[::-1]
-                y = []
-                y.append(x[0])
-                formated_list.append(y)
+    if unformat == []:
+        formated_list = []
+    else:
+        while count < lenght:
+            try:
+                temp = []
+                temp.append(unformat[count])
+                temp.append(unformat[count+1])
+                temp.append(unformat[count+2])
+                formated_list.append(temp)
                 count += 3
-            if lenght%3 == 2:
-                x = unformat[::-1]
-                y = []
-                y.append(x[0])
-                y.append(x[1])
-                formated_list.append(y[::-1])
-                count += 3
+            except IndexError:
+                if lenght%3 == 1:
+                    x = unformat[::-1]
+                    y = []
+                    y.append(x[0])
+                    formated_list.append(y)
+                    count += 3
+                if lenght%3 == 2:
+                    x = unformat[::-1]
+                    y = []
+                    y.append(x[0])
+                    y.append(x[1])
+                    formated_list.append(y[::-1])
+                    count += 3
     return formated_list
 
 @app.route('/logout')
