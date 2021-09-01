@@ -111,7 +111,7 @@ def buynow(id):
     con.commit()
     db.execute(f"SELECT link FROM products WHERE product_id = {id} ")
     link = db.fetchall()
-    return webbrowser.open_new_tab(f'{link[0][0]}') and redirect ("",204)
+    return redirect("",204) and webbrowser.open_new_tab(f'{link[0][0]}') 
 
 @app.route('/', methods = ["POST", "GET"])
 def index():
