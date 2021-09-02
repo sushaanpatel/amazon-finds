@@ -2,6 +2,7 @@
     <head>
         <title>Amazon Finds</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="../static/icons/dark-plane.png">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
@@ -92,25 +93,16 @@
                 <div class="col-5" style="min-width: 500px;margin:auto;overflow:auto;margin-top:0;margin-bottom:6.5%;">
                     <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-inner">
-                          <div class="carousel-item active">
-                            <img src="{{p[7].split(',')[0]}}" class="rounded d-block w-100">
+                          <div class="carousel-item active" data-bs-interval="6000">
+                            <img src="{{p[7].split(',')[0]}}" style="width: 90%;" class="rounded">
                           </div>
-                          <div class="carousel-item">
-                            <img src="{{p[7].split(',')[3]}}" class="rounded d-block w-100">
+                          <div class="carousel-item" data-bs-interval="6000">
+                            <img src="{{p[7].split(',')[3]}}" style="width: 90%;" class="rounded">
                           </div>
-                          <div class="carousel-item">
-                            <img src="{{p[7].split(',')[2]}}" class="rounded d-block w-100">
+                          <div class="carousel-item" data-bs-interval="6000">
+                            <img src="{{p[7].split(',')[2]}}" style="width: 90%;" class="rounded">
                           </div>
-
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                          <b><span class="bi bi-chevron-left" style="color: black;font-size:30px;" aria-hidden="true"></span></b>
-                          <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button  class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                        <b><span class="bi bi-chevron-right" style="color: black;font-size:30px;"aria-hidden="true"></span></b>
-                          <span class="visually-hidden">Next</span>
-                        </button>
                     </div>
                 </div>
                 <div class="col-5" style="margin-bottom:6.5%;min-width:470px;text-align:left;">
