@@ -27,27 +27,30 @@ def unauth():
 #     y = updatedb(i[1])
 #     rate = round(float(y['rating']))
 #     if y['price'] != '':
+#         con.reconnect()
 #         db.execute(f"""UPDATE products SET price = '{y['price']}', availability = "{y['availability']}", rating = '{rate}' WHERE product_id = {i[0]}""")
 #     else:
 #         db.execute(f"""UPDATE products SET availability = "{y['availability']}", rating = '{rate}' WHERE product_id = {i[0]}""")
 #     con.commit()
 
-global paserr
-paserr = ""
-global proderr
-proderr = ""
-global uperr
-uperr = ""
-global product_list
-product_list = []
-global display_list
-display_list = []
-global current_page
-current_page = ""
-global fromadminsearch
-fromadminsearch = False
-global fromsearch
-fromsearch = False
+@app.before_first_request
+def before():
+    global paserr
+    paserr = ""
+    global proderr
+    proderr = ""
+    global uperr
+    uperr = ""
+    global product_list
+    product_list = []
+    global display_list
+    display_list = []
+    global current_page
+    current_page = ""
+    global fromadminsearch
+    fromadminsearch = False
+    global fromsearch
+    fromsearch = False
 
 def format(unformat):
     lenght = len(unformat)
@@ -112,6 +115,16 @@ def buynow(id):
     db.execute(f"SELECT link FROM products WHERE product_id = {id} ")
     link = db.fetchall()
     return redirect(f'{link[0][0]}')
+
+@app.route('/home', methods = ["POST", "GET"])
+def home():
+    global current_page
+    global fromsearch
+    global fromadminsearch
+    current_page = '/'
+    fromsearch = False
+    fromadminsearch = False
+    return redirect('/')
 
 @app.route('/', methods = ["POST", "GET"])
 def index():
@@ -224,17 +237,18 @@ def add():
     current_page = '/products'
     if request.method == "POST":
         asin = request.form['asin'].upper()
-        try:
-            product = getall(asin)
-        except:
-            proderr = "Product Not Found"
-            return redirect('/products')
+        # try:
+        product = getall(asin)
+        # except:
+        #     proderr = "Product Not Found"
+        #     return redirect('/products')
         title = product['name'].replace('"', "'")
         price = product['price']
         rating = round(float(product['rating']))
         avail = product['availability']
         image = str(product['image'])
         descrip = str(product['descrip']).replace('"', "'")
+        disname = product['display_name']
         link = request.form['amazon-link']
         catagory = request.form.get('product-cata')
         creator = request.form['product-creator']
@@ -246,7 +260,7 @@ def add():
         if asin != "" and link != "" and creator != "" and employ_name != "" and catagory != "none":
             con.reconnect()
             db = con.cursor()
-            db.execute(f"""INSERT INTO products(asin, name, description, catagory, link, image, creator, employ_name, date, times_clicked, price, rating, availability) VALUES("{asin}", "{title}", "{descrip}", "{catagory}", "{link}", "{image}", "{creator}", "{employ_name}", "{date.date()}", 0, "{price}", "{rating}", "{avail}")""")
+            db.execute(f"""INSERT INTO products(asin, name, description, catagory, link, image, creator, employ_name, date, times_clicked, price, rating, availability, display_name) VALUES("{asin}", "{title}", "{descrip}", "{catagory}", "{link}", "{image}", "{creator}", "{employ_name}", "{date.date()}", 0, "{price}", "{rating}", "{avail}", "{disname}")""")
             con.commit()
             return redirect('/products')
         else:
@@ -273,6 +287,7 @@ def delete(prod_id):
 
 @app.route('/updateprice/<int:id>', methods = ["POST", "GET"])
 def updateprice(id):
+    con.reconnect()
     db = con.cursor()
     if request.method == "POST":
         price = "₹" + request.form['price']

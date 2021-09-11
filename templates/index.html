@@ -70,12 +70,12 @@
                     <a class="nav-link active" style="font-size: 18px;" href="#">About us</a>
                   </li>
                 </ul>
-                <!-- <div class="d-flex">
+                <div class="d-flex">
                     <div class="form-check form-switch" style="margin-left:4px;margin-right:8px;">
                         <label for="in" style="color:white;font-size:18px;">Dark Mode</label>
                         <input type="checkbox" id="in" onclick="theme()" style="font-size: 18px;" class="form-check-input">
                     </div>
-                </div> -->
+                </div>
               </div>
             </div>
         </nav>
@@ -91,8 +91,8 @@
                         <option value="elect">Electronic</option>
                     </select>
                     <input type="text" class="form-control white" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
-                    <input type="submit" value="Search" class="btn btn-primary" style="font-size: 18px;">
-                    <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 18px;">Clear</a>
+                    <input type="submit" value="Search" class="btn btn-primary" style="font-size: 16px;">
+                    <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 16px;">Clear</a>
                 </div>
             </form>
         </div>
@@ -100,18 +100,27 @@
         <br>
         <div class="container">
             {% if display == [] %}
-            <h1>No Posts Found</h1>
+            <div class="container">
+            <div class="row">
+                <div class="col">
+                    <img src="static/icons/404cart.png" alt="404 error cart" class="rounded" style="width: 75%;min-width:400px;">
+                </div>
+                <div class="col">
+                   <b style="font-size: 20px;margin-top:25%;">404 No Products Found<br>Please Check your search again</p><p><li style="font-size: 18px;">Make sure that all words are spelled correctly.</li><li style="font-size: 18px;">Try different keywords.</li><li style="font-size: 18px;">Try more general keywords.</li><li style="font-size: 18px;">Try fewer keywords.</li></b>
+                </div>
+            </div>
+            </div>
             {% else %}
             {% for i in display %}
             <div class="row">
                 {% for o in i %}
                 <div class="col">
-                    <a href="/product/id={{o[0]}}"><div class="card white-div" id="div" style="margin-bottom: 6.5%; height:500px;border:0px;">
+                    <a target="_blank" href="/product/id={{o[0]}}"><div class="card white-div" id="div" style="margin-bottom: 6.5%; height:500px;border:0px;">
                         <center>
-                        <img src="{{o[7].split(',')[0]}}" height="260px" alt="{{o[2]}}" style="margin-top: 5%;" class="rounded">
+                        <img src="{{o[7].split(',')[0]}}" height="260px" alt="{{o[2]}}" style="margin-top: 5%;max-width:320px;" class="rounded">
                         </center>
                         <div class="card-body">
-                            <p class="card-title" style="font-size:1.2rem;"><b>{{o[2]}}</b></p>
+                            <p class="card-title" style="font-size:1.2rem;"><b>{{o[14]}}</b></p>
                             {% if o[8] == "1" %}
                             <p class="card-text" style="font-size: 18px;"><i class="bi bi-star-fill" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i><i class="bi bi-star" style="color: yellow;"></i></p>
                             {% elif o[8] == "2" %}
@@ -135,6 +144,9 @@
             </div>
             {% endfor %}
             {% endif %}
+            <center>
+            <a href="/home" class="btn btn-dark" style="width: 30%;"><b>Load More Products</b></a>
+            </center>
         </div>
         <br>
         <script>
@@ -143,9 +155,10 @@
 
             function theme(){
                 var body = document.body;
-                var card_div = document.querySelectorAll('.white-div')
-                var buttons = document.querySelectorAll('.btn btn-dark')
                 if (body.className == "white"){
+                    var card_div = document.querySelectorAll('.white-div')
+                    var input= document.querySelectorAll('.form control')
+                    var buttons = document.querySelectorAll('.btn btn-dark')
                     body.className = 'dark'
                     for (var i = 0;i<card_div.length;i++){
                         card_div[i].className = "card dark-div"
@@ -153,7 +166,12 @@
                     for (var i = 0;i<buttons.length;i++){
                         buttons[i].className = "btn btn-light"
                     }
+                    for (var i = 0;i<input.length;i++){
+                        input[i].className = "form control dark"
+                    }
                 } else {
+                    var card_div = document.querySelectorAll('.dark-div')
+                    var buttons = document.querySelectorAll('.btn btn-dark')
                     body.className = 'white'
                     for (var i = 0;i<card_div.length;i++){
                         card_div[i].className = "card white-div"

@@ -9,7 +9,16 @@ client = ScraperAPIClient(api)
     
 def getall(asin):
     out = {}
-    rq = client.get(url = f'https://www.amazon.in/dp/{asin}', autoparse = True).json()
+    rq = client.get(url = f'https://www.amazon.in/dp/{asin}', autoparse = True, country_code='in').json()
+    c = 0
+    nametext = ''
+    if len(rq['name']) > 107:
+        while c < 107:
+            nametext = nametext + rq['name'][c]
+            c += 1
+        nametext = nametext + "..."
+    else:
+        nametext = rq['name']
     text = ""
     a = rq['images']
     for i in a:
@@ -31,8 +40,9 @@ def getall(asin):
             text1 = y
         else:
             text1 = text1 + f"~{y}"
+    out['display_name'] = nametext
     out['name'] = rq['name']
-    out['price'] = rq['pricing'].split('.')[0]
+    out['price'] = rq['pricing'].split('.')[0].encode("ascii", "ignore")
     out['image'] = text
     out['descrip'] = text1
     out['rating'] = str(rq['average_rating'])
@@ -41,8 +51,8 @@ def getall(asin):
 
 def updatedb(asin):
     out = {}
-    rq = client.get(url = f'https://www.amazon.in/dp/{asin}', autoparse = True).json()
-    out['price'] = rq['pricing'].split('.')[0]
+    rq = client.get(url = f'https://www.amazon.in/dp/{asin}', autoparse = True, country_code='in').json()
+    out['price'] = rq['pricing'].split('.')[0].encode("ascii", "ignore").decode('UTF-8')
     out['rating'] = str(rq['average_rating'])
     out['availability'] = rq['availability_status'].split(',')[0]
     return out
