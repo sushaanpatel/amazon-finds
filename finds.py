@@ -189,7 +189,6 @@ def search():
 def filter():
     global display_list
     global fromsearch
-    fromsearch = True
     if request.method == "POST":
         query = display_list
         display_list = []
@@ -207,6 +206,7 @@ def filter():
             elif sub_fil == 'low':
                 pass
         temp = format(out)
+        fromsearch = True
         for i in temp:
             display_list.append(i)
         return redirect('/')
