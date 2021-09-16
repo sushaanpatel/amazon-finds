@@ -56,5 +56,3 @@ def updatedb(asin):
     out['rating'] = str(rq['average_rating'])
     out['availability'] = rq['availability_status'].split(',')[0]
     return out
-
-print(getall('B084DWH53T'))

@@ -190,7 +190,7 @@
                 var body = document.body;
                 if (body.className == "white"){
                     var card_div = document.querySelectorAll('.white-div')
-                    var input= document.querySelectorAll('.form control')
+                    var input= document.querySelectorAll('.form-control white')
                     var buttons = document.querySelectorAll('.btn btn-dark')
                     body.className = 'dark'
                     for (var i = 0;i<card_div.length;i++){
@@ -200,10 +200,11 @@
                         buttons[i].className = "btn btn-light"
                     }
                     for (var i = 0;i<input.length;i++){
-                        input[i].className = "form control dark"
+                        input[i].className = "form-control dark"
                     }
                 } else {
                     var card_div = document.querySelectorAll('.dark-div')
+                    var input= document.querySelectorAll('.form-control dark')
                     var buttons = document.querySelectorAll('.btn btn-dark')
                     body.className = 'white'
                     for (var i = 0;i<card_div.length;i++){
