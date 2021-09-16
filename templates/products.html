@@ -89,7 +89,7 @@
         </b></button>
         <p style="font-size: 16px;color:#ff4d4d;">{{err}}</p>
         <div class="collapse" id="collapse">
-        <div class="white-div" style="width: 30%;border-radius:5px;min-width:400px;height:320px;" id="link-div">
+        <div class="white-div" style="width: 30%;border-radius:5px;min-width:350px;height:320px;" id="link-div">
             <br>
             <form action="/products" method="POST" style="margin-bottom:3%;" enctype="multipart/form-data">
                 <input type="text" class="form-control" name="asin" id="asin" placeholder="Product Asin" style="margin-bottom:1%;width:85%;">
@@ -123,7 +123,7 @@
             </div>
         </div>
         <br><br><br>
-        <div class="container" style="width: 70%;text-align:left;min-width: 400px;">
+        <div class="container" style="width: 70%;text-align:left;min-width: 350px;">
             {% if products == [] %}
             <h1>No Products Found</h1>
             {% else %}

@@ -107,14 +107,12 @@ def buynow(id):
     global current_page
     con.reconnect()
     db = con.cursor()
-    db.execute(f"SELECT times_clicked FROM products WHERE product_id = {id}")
-    x = db.fetchall()[0][0]
-    x += 1
-    db.execute(f"""UPDATE products SET times_clicked = {x} WHERE product_id = {id} """)
+    db.execute(f"SELECT * FROM products WHERE product_id = {id}")
+    x = db.fetchall()[0]
+    y = x[13] + 1
+    db.execute(f"""UPDATE products SET times_clicked = {y} WHERE product_id = {id} """)
     con.commit()
-    db.execute(f"SELECT link FROM products WHERE product_id = {id} ")
-    link = db.fetchall()
-    return redirect(f'{link[0][0]}')
+    return redirect(f'{x[6]}')
 
 @app.route('/home', methods = ["POST", "GET"])
 def home():
@@ -166,29 +164,54 @@ def search():
     if request.method == "POST":
         display_list = []
         searchword = request.form['search_bar'].lower()
-        cata = request.form.get('filter')
-        sub_cata = request.form.get('sub_fil')
         con.reconnect()
         db = con.cursor()
-        if cata == "all":
-            db.execute(f"SELECT * FROM products WHERE name LIKE '%{searchword}%'")
-            query = db.fetchall()
-            fromsearch = True
-            out = format(query)
-            for i in out:
-                display_list.append(i)
-        else:
-            if searchword != '':
-                db.execute(f"""SELECT * FROM products WHERE catagory = "{sub_cata}" and name LIKE "%{searchword}%" """)
-            else:
-                db.execute(f"""SELECT * FROM products WHERE catagory = "{sub_cata}" """)
-            query = db.fetchall()
-            fromsearch = True
-            out = format(query)
-            for i in out:
-                display_list.append(i)
+        # if cata == "all":
+        db.execute(f"SELECT * FROM products WHERE name LIKE '%{searchword}%'")
+        query = db.fetchall()
+        fromsearch = True
+        out = format(query)
+        for i in out:
+            display_list.append(i)
+        # else:
+        #     if searchword != '':
+        #         db.execute(f"""SELECT * FROM products WHERE catagory = "{sub_cata}" and name LIKE "%{searchword}%" """)
+        #     else:
+        #         db.execute(f"""SELECT * FROM products WHERE catagory = "{sub_cata}" """)
+        #     query = db.fetchall()
+        #     fromsearch = True
+        #     out = format(query)
+        #     for i in out:
+        #         display_list.append(i)
         return redirect('/')
 
+@app.route('/filter', methods = ["POST", "GET"])
+def filter():
+    global display_list
+    global fromsearch
+    fromsearch = True
+    if request.method == "POST":
+        query = display_list
+        display_list = []
+        out = []
+        sub_fil = request.form['sub_fil']
+        fil = request.form['filter']
+        if fil == 'category':
+            for j in query:
+                for i in j:
+                    if i[5] == sub_fil:
+                        out.append(i)
+        elif fil == 'price':
+            if sub_fil == 'high':
+                pass
+            elif sub_fil == 'low':
+                pass
+        temp = format(out)
+        for i in temp:
+            display_list.append(i)
+        return redirect('/')
+
+    
 @app.route('/admin', methods = ["POST", "GET"])
 def admin():
     global paserr
@@ -325,6 +348,7 @@ def update(prod_id):
             creator = request.form['product-creator']
             employ_name = request.form['employ-name']
             date = datetime.now()
+            display_name = product['display_name']
         else:
             link = request.form['amazon-link']
             catagory = request.form.get('product-cata')
@@ -336,9 +360,9 @@ def update(prod_id):
             db = con.cursor()
             if asin != p[1]:
                 if price == '':
-                    db.execute(f"""UPDATE products SET asin = "{asin}", name = "{title}", description = "{descrip}", catagory = "{catagory}", link = "{link}", image = "{image}", creator = "{creator}", employ_name = "{employ_name}", date = "{date.date()}", availability = "{avail}", rating = {rating} WHERE product_id = "{prod_id}" """)
+                    db.execute(f"""UPDATE products SET asin = "{asin}", name = "{title}", description = "{descrip}", catagory = "{catagory}", link = "{link}", image = "{image}", creator = "{creator}", employ_name = "{employ_name}", date = "{date.date()}", availability = "{avail}", rating = {rating}, display_name = {display_name} WHERE product_id = "{prod_id}" """)
                 else:
-                    db.execute(f"""UPDATE products SET asin = "{asin}", name = "{title}", description = "{descrip}", catagory = "{catagory}", link = "{link}", image = "{image}", creator = "{creator}", employ_name = "{employ_name}", date = "{date.date()}", price = "{price}", availability = "{avail}", rating = {rating} WHERE product_id = "{prod_id}" """)
+                    db.execute(f"""UPDATE products SET asin = "{asin}", name = "{title}", description = "{descrip}", catagory = "{catagory}", link = "{link}", image = "{image}", creator = "{creator}", employ_name = "{employ_name}", date = "{date.date()}", price = "{price}", availability = "{avail}", rating = {rating}, display_name = {display_name} WHERE product_id = "{prod_id}" """)
             else:
                 db.execute(f"""UPDATE products SET catagory = "{catagory}", link = "{link}", creator = "{creator}", employ_name = "{employ_name}", date = "{date.date()}" WHERE product_id = "{prod_id}" """)
             con.commit()
@@ -355,5 +379,3 @@ def update(prod_id):
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-# db = con.cursor()

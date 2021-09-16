@@ -1,4 +1,4 @@
-<html>
+<html lang="en-US">
     <head>
         <title>Amazon Finds</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -67,7 +67,7 @@
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                   <li class="nav-item">
-                    <a class="nav-link active" style="font-size: 18px;" href="#">About us</a>
+                    <a class="nav-link active" style="font-size: 18px;" data-bs-toggle="modal" data-bs-target="#lang"><i class="bi bi-translate"></i> Language</a>
                   </li>
                 </ul>
                 <div class="d-flex">
@@ -79,24 +79,57 @@
               </div>
             </div>
         </nav>
+        <div class="modal fade" id="lang" tabindex="-1" aria-labelledby="language options" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                    <h5>Choose a Language</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <script type="text/javascript" src=
+                    "https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+                    </script>
+                    <script type="text/javascript">
+                        function googleTranslateElementInit() {
+                            new google.translate.TranslateElement(
+                                {pageLanguage: 'en'},
+                                'google_translate_element'
+                            );
+                        }
+                    </script>
+                    <center>
+                        <div id="google_translate_element"></div> 
+                    </center>
+                </div>
+              </div>
+            </div>
+        </div>
         <button id="topbutton" class="btn btn-dark" onclick="topFunction()"><i style="font-size:30px;" class="bi bi-arrow-bar-up"></i></button>
         <center>
-        <div style="width: 99%;max-width:1150px;margin-top:1%;" id="search_div">
+        <div style="width: 99%;max-width:1150px;margin-top:1%;">
             <form action="/search" method="POST">
                 <div class="input-group mb-3">
-                    <select name="filter" class="btn btn-dark dropdown" id="filter" onclick="changesearch()" style="font-size: 18px;width:100px;">
-                        <option value="all">All</option>
-                        <option value="homeapp">Home Appliances &ThickSpace;</option>
-                        <option value="elderassist">Elder Assistance</option>
-                        <option value="elect">Electronic</option>
-                    </select>
                     <input type="text" class="form-control white" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
-                    <input type="submit" value="Search" class="btn btn-primary" style="font-size: 16px;">
-                    <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 16px;">Clear</a>
+                    <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
                 </div>
             </form>
         </div>
         </center>
+        <div style="width: max-content;margin-right:1%;float:right;" id="search_div">
+            <form action="/filter" method="POST">
+                <div class="input-group mb-3">
+                    <select name="filter" class="btn btn-dark dropdown" id="filter" onclick="changesearch()" style="font-size: 18px;">
+                        <option value="category">Category</option>
+                        <option value="price">Price</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
+                    <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 16px;">Clear</a>
+                </div>
+            </form>
+        </div>
+        <br>
+        <br>
         <br>
         <div class="container">
             {% if display == [] %}
@@ -106,7 +139,7 @@
                     <img src="static/icons/404cart.png" alt="404 error cart" class="rounded" style="width: 75%;min-width:400px;">
                 </div>
                 <div class="col">
-                   <b style="font-size: 20px;margin-top:25%;">404 No Products Found<br>Please Check your search again</p><p><li style="font-size: 18px;">Make sure that all words are spelled correctly.</li><li style="font-size: 18px;">Try different keywords.</li><li style="font-size: 18px;">Try more general keywords.</li><li style="font-size: 18px;">Try fewer keywords.</li></b>
+                   <b style="font-size: 20px;">404 No Products Found<br>Please Check your search again</p><p><li style="font-size: 18px;">Make sure that all words are spelled correctly.</li><li style="font-size: 18px;">Try different keywords.</li><li style="font-size: 18px;">Try more general keywords.</li><li style="font-size: 18px;">Try fewer keywords.</li></b>
                 </div>
             </div>
             </div>
@@ -198,24 +231,70 @@
             function changesearch(){
                 var div = document.getElementById('search_div');
                 var fil = document.getElementById('filter').value;
-                if (fil == "homeapp"){
+                if (fil == "category"){
                     div.innerHTML = 
                     `
-                    <form action="/search" method="POST">
+                    <form action="/filter" method="POST">
                         <div class="input-group mb-3">
-                            <select name="cata" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;width:100px;">
-                                <option value="all">All</option>
-                                <option value="homeapp" selected>Home Appliances</option>
+                            <select class="btn btn-dark dropdown" id="fil" oninput="changefilter()" style="font-size: 18px;">
+                                <option value="homeapp">Home Appliances</option>
                                 <option value="elderassist">Elder Assistance</option>
                                 <option value="elect">Electronic</option>
                             </select>
+                            <select name="filter" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;">
+                                <option value="category" selected>Category</option>
+                                <option value="price">Price</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
+                            <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 16px;">Clear</a>
+                          </div>
+                    </form>
+                    `;
+                }
+                if (fil == "price"){
+                    div.innerHTML = 
+                    `
+                    <form action="/filter" method="POST">
+                        <div class="input-group mb-3">
+                            <select name="sub_fil" class="btn btn-dark dropdown" id="fil" style="font-size: 18px;">
+                                <option value="high">High - Low</option>
+                                <option value="low">Low - High</option>
+                            </select>
+                            <select name="filter" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;">
+                                <option value="category">Category</option>
+                                <option value="price" selected>Price</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
+                            <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 16px;">Clear</a>
+                          </div>
+                    </form>
+                    `;
+                }
+            }
+
+            function changefilter(){
+                var div = document.getElementById('search_div');
+                var fil = document.getElementById('fil').value;
+                if (fil == "homeapp"){
+                    div.innerHTML = 
+                    `
+                    <form action="/filter" method="POST">
+                        <div class="input-group mb-3">
                             <select name="sub_fil" class="btn btn-dark dropdown" style="font-size: 18px;">
                                 <option value="Home/Kichten">Kitchen</option>
                                 <option value="Home/Bathroom">Bathroom</option>
                             </select>
-                            <input type="text" class="form-control" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
-                            <input type="submit" value="Search" class="btn btn-primary" style="font-size: 18px;">
-                            <button class="btn btn-dark" type="button" style="font-size: 18px;">Clear</button>
+                            <select class="btn btn-dark dropdown" id="fil" oninput="changefilter()" style="font-size: 18px;">
+                                <option value="homeapp" selected>Home Appliances</option>
+                                <option value="elderassist">Elder Assistance</option>
+                                <option value="elect">Electronic</option>
+                            </select>
+                            <select name="filter" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;">
+                                <option value="category" selected>Category</option>
+                                <option value="price">Price</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
+                            <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 16px;">Clear</a>
                           </div>
                     </form>
                     `;
@@ -223,45 +302,48 @@
                 if (fil == "elderassist"){
                     div.innerHTML = 
                     `
-                    <form action="/search" method="POST">
+                    <form action="/filter" method="POST">
                         <div class="input-group mb-3">
-                            <select name="cata" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;width:100px;">
-                                <option value="all">All</option>
-                                <option value="homeapp">Home Appliances</option>
-                                <option value="elderassist" selected>Elder Assistance</option>
-                                <option value="elect">Electronic</option>
-                            </select>
                             <select name="sub_fil" class="btn btn-dark dropdown" style="font-size: 18px;">
                                 <option value="Elder/Cushions">Cushions</option>
                                 <option value="Elder/Accupenture">Accupenture</option>
                             </select>
-                            <input type="text" class="form-control" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
-                            <input type="submit" value="Search" class="btn btn-primary" style="font-size: 18px;">
-                            <button class="btn btn-dark" type="button" style="font-size: 18px;">Clear</button>
-                          </div>
+                            <select class="btn btn-dark dropdown" id="fil" oninput="changefilter()" style="font-size: 18px;">
+                                <option value="homeapp">Home Appliances</option>
+                                <option value="elderassist" selected>Elder Assistance</option>
+                                <option value="elect">Electronic</option>
+                            </select>
+                            <select name="filter" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;">
+                                <option value="category" selected>Category</option>
+                                <option value="price">Price</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
+                            <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 16px;">Clear</a>    
+                        </div>
                     </form>
                     `;
                 }
                 if (fil == "elect"){
                     div.innerHTML = 
                     `
-                    <form action="/search" method="POST">
+                    <form action="/filter" method="POST">
                         <div class="input-group mb-3">
-                            <select name="cata" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;width:100px;">
-                                <option value="all">All</option>
-                                <option value="homeapp">Home Appliances</option>
-                                <option value="elderassist">Elder Assistance</option>
-                                <option value="elect" selected>Electronic</option>
-                            </select>
                             <select name="sub_fil" class="btn btn-dark dropdown" style="font-size: 18px;">
                                 <option value="Electronics/Mobile">Mobile</option>
                                 <option value="Electronics/Laptop">Laptop</option>
                             </select>
+                            <select class="btn btn-dark dropdown" id="fil" oninput="changefilter()" style="font-size: 18px;">
+                                <option value="homeapp">Home Appliances</option>
+                                <option value="elderassist">Elder Assistance</option>
+                                <option value="elect" selected>Electronic</option>
                             </select>
-                            <input type="text" class="form-control" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
-                            <input type="submit" value="Search" class="btn btn-primary" style="font-size: 18px;">
-                            <button class="btn btn-dark" type="button" style="font-size: 18px;">Clear</button>
-                          </div>
+                            <select name="filter" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;">
+                                <option value="category" selected>Category</option>
+                                <option value="price">Price</option>
+                            </select>
+                            <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
+                            <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 16px;">Clear</a>
+                        </div>
                     </form>
                     `;
                 }

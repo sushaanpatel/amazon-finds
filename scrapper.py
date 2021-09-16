@@ -42,7 +42,7 @@ def getall(asin):
             text1 = text1 + f"~{y}"
     out['display_name'] = nametext
     out['name'] = rq['name']
-    out['price'] = rq['pricing'].split('.')[0].encode("ascii", "ignore")
+    out['price'] = rq['pricing'].split('.')[0].encode("ascii", "ignore").decode('UTF-8')
     out['image'] = text
     out['descrip'] = text1
     out['rating'] = str(rq['average_rating'])
@@ -56,3 +56,5 @@ def updatedb(asin):
     out['rating'] = str(rq['average_rating'])
     out['availability'] = rq['availability_status'].split(',')[0]
     return out
+
+print(getall('B084DWH53T'))
