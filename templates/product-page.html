@@ -15,7 +15,6 @@
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Ubuntu&family=Work+Sans:wght@400;900&display=swap');
             .dark{
                 background-color: #222222;
                 font-family: 'Open Sans', sans-serif;
@@ -192,7 +191,39 @@
 
             function topFunction() {
                 document.body.scrollTop = 0;
-                document.documentElement.scrollTop = 0;
+                document.documentElement.scrollTop = 0
+            }
+
+            function theme(){
+                var body = document.body;
+                if (body.className == "white"){
+                    var card_div = document.querySelectorAll('.white-div')
+                    var input= document.querySelectorAll('.form-control white')
+                    var buttons = document.querySelectorAll('.btn btn-dark')
+                    body.className = 'dark'
+                    for (var i = 0;i<card_div.length;i++){
+                        card_div[i].className = "card dark-div"
+                    }
+                    for (var i = 0;i<buttons.length;i++){
+                        buttons[i].className = "btn btn-light"
+                    }
+                    for (var i = 0;i<input.length;i++){
+                        input[i].className = "form-control dark"
+                    }
+                    localStorage.setItem("mode", "dark")
+                } else {
+                    var card_div = document.querySelectorAll('.dark-div')
+                    var input= document.querySelectorAll('.form-control dark')
+                    var buttons = document.querySelectorAll('.btn btn-dark')
+                    body.className = 'white'
+                    for (var i = 0;i<card_div.length;i++){
+                        card_div[i].className = "card white-div"
+                    }
+                    for (var i = 0;i<buttons.length;i++){
+                        buttons[i].className = "btn btn-dark"
+                    }
+                    localStorage.setItem("mode", "white")
+                }
             }
         </script>
     </body>

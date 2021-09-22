@@ -4,9 +4,8 @@ import mysql.connector
 from datetime import datetime
 from models import app, db2, con, Users
 from flask_sqlalchemy import SQLAlchemy
-from werkzeug.security import check_password_hash
 from scrapper import getall, updatedb
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user
 
 login_manager = LoginManager()
@@ -19,38 +18,16 @@ def load_user(user_id):
 def unauth():
     return redirect('/admin')
 
-# con.reconnect()
-# db = con.cursor()
-# db.execute("SELECT * FROM products")
-# x = db.fetchall()
-# for i in x:
-#     y = updatedb(i[1])
-#     rate = round(float(y['rating']))
-#     if y['price'] != '':
-#         con.reconnect()
-#         db.execute(f"""UPDATE products SET price = '{y['price']}', availability = "{y['availability']}", rating = '{rate}' WHERE product_id = {i[0]}""")
-#     else:
-#         db.execute(f"""UPDATE products SET availability = "{y['availability']}", rating = '{rate}' WHERE product_id = {i[0]}""")
-#     con.commit()
-
 @app.before_first_request
 def before():
-    global paserr
-    paserr = ""
-    global proderr
-    proderr = ""
-    global uperr
-    uperr = ""
-    global product_list
-    product_list = []
-    global display_list
-    display_list = []
-    global current_page
-    current_page = ""
-    global fromadminsearch
-    fromadminsearch = False
-    global fromsearch
-    fromsearch = False
+    session['paserr'] = ""
+    session['proderr'] = ""
+    session['uperr'] = ""
+    session['products'] = []
+    session['display'] = []
+    session['currentp'] = ""
+    session['frmadmsearch'] = False
+    session['frmsearch'] = False
 
 def format(unformat):
     lenght = len(unformat)
@@ -90,21 +67,15 @@ def logout():
 
 @app.route('/clearfilter')
 def clear():
-    global current_page
-    global fromadminsearch
-    global fromsearch
-    global product_list
-    product_list = []
-    if current_page == '/products':
-        fromadminsearch = False
+    if session['currentp'] == '/products':
+        session['frmadmsearch'] = False
         return redirect('/products')
-    if current_page == '/':
-        fromsearch = False
+    if session['currentp'] == '/':
+        session['frmsearch'] = False
         return redirect('/')
 
 @app.route('/buynow/<int:id>')
 def buynow(id):
-    global current_page
     con.reconnect()
     db = con.cursor()
     db.execute(f"SELECT * FROM products WHERE product_id = {id}")
@@ -116,39 +87,30 @@ def buynow(id):
 
 @app.route('/home', methods = ["POST", "GET"])
 def home():
-    global current_page
-    global fromsearch
-    global fromadminsearch
-    current_page = '/'
-    fromsearch = False
-    fromadminsearch = False
+    session['frmadmsearch'] = False
+    session['frmsearch'] = False
+    session['currentp'] = '/'
     return redirect('/')
 
 @app.route('/', methods = ["POST", "GET"])
 def index():
-    global paserr
-    paserr = ""
-    global proderr
-    proderr = ""
-    global product_list
-    global display_list
-    global current_page
-    current_page = '/'
+    session['paserr'] = ""
+    session['proderr'] = ""
+    session['currentp'] = '/'
     con.reconnect()
     db = con.cursor()
-    if fromsearch == False:
-        display_list = []
+    if session['frmsearch'] == False:
         db.execute("SELECT * from products")
-        product_list = db.fetchall()
-        out = format(product_list)
-        for i in out:
-            display_list.append(i)
-    return render_template('index.html', display = display_list, prod = product_list)
+        prod_list = db.fetchall()
+        out = format(prod_list)
+        for i in range(len(out)):
+            out[i] = out[i][::-1]
+        session['display'] = out[::-1]
+    return render_template('index.html', display = session['display'])
 
 @app.route('/product/id=<int:id>', methods = ["POST", "GET"])
 def product_page(id):
-    global current_page
-    current_page = '/productpage'
+    session['currentp'] = '/productpage'
     con.reconnect()
     db = con.cursor()
     db.execute(f"""SELECT * FROM products WHERE product_id = "{id}" """)
@@ -157,41 +119,24 @@ def product_page(id):
 
 @app.route('/search', methods = ["POST", "GET"])
 def search():
-    global display_list
-    global fromsearch
-    global current_page
-    current_page = '/'
+    session['currentp'] = '/'
     if request.method == "POST":
-        display_list = []
         searchword = request.form['search_bar'].lower()
         con.reconnect()
         db = con.cursor()
-        # if cata == "all":
         db.execute(f"SELECT * FROM products WHERE name LIKE '%{searchword}%'")
         query = db.fetchall()
-        fromsearch = True
+        session['frmsearch'] = True
         out = format(query)
-        for i in out:
-            display_list.append(i)
-        # else:
-        #     if searchword != '':
-        #         db.execute(f"""SELECT * FROM products WHERE catagory = "{sub_cata}" and name LIKE "%{searchword}%" """)
-        #     else:
-        #         db.execute(f"""SELECT * FROM products WHERE catagory = "{sub_cata}" """)
-        #     query = db.fetchall()
-        #     fromsearch = True
-        #     out = format(query)
-        #     for i in out:
-        #         display_list.append(i)
+        for i in range(len(out)):
+            out[i] = out[i][::-1]
+        session['display'] = out[::-1]
         return redirect('/')
 
 @app.route('/filter', methods = ["POST", "GET"])
 def filter():
-    global display_list
-    global fromsearch
     if request.method == "POST":
-        query = display_list
-        display_list = []
+        query = session['display']
         out = []
         sub_fil = request.form['sub_fil']
         fil = request.form['filter']
@@ -205,20 +150,15 @@ def filter():
                 pass
             elif sub_fil == 'low':
                 pass
+        session['frmsearch'] = True
         temp = format(out)
-        fromsearch = True
-        for i in temp:
-            display_list.append(i)
+        session['display'] = temp
         return redirect('/')
 
     
 @app.route('/admin', methods = ["POST", "GET"])
 def admin():
-    global paserr
-    global proderr
-    proderr = ""
-    global product_list
-    product_list = []
+    session['proderr'] = ""
     if request.method == "POST":
         password = request.form['password']
         passfromdb = Users.query.filter_by(id = "5").first()
@@ -226,45 +166,54 @@ def admin():
             login_user(passfromdb)
             return redirect('/products')
         else:
-            paserr = "Wrong Password"   
+            session['paserr'] = "Wrong Password"   
             return redirect('/admin')
     else:
-        return render_template('pass-protect.html', err = paserr)
+        return render_template('pass-protect.html', err = session['paserr'])
 
 @app.route('/adminsearch', methods=["POST", "GET"])
 def adminsearch():
-    global product_list
-    product_list = []
-    global fromadminsearch
-    global current_page
-    current_page = '/products'
+    session['currentp'] = '/products'
     if request.method == "POST":
         search = request.form['adsearch']
         con.reconnect()
         db = con.cursor()
         db.execute(f"SELECT * FROM products WHERE name LIKE '%{search}%'")
         query = db.fetchall()
-        fromadminsearch = True
-        product_list = query
-        product_list = product_list[::-1]
+        session['frmadmsearch'] = True
+        session['products'] = query[::-1]
         return redirect('/products')
+
+@app.route('/updatedb')
+@app.route('/updatedb/<int:id>')
+def updb(id):
+    con.reconnect()
+    db = con.cursor()
+    db.execute("SELECT * FROM products")
+    x = db.fetchall()
+    for i in x:
+        y = updatedb(i[1])
+        rate = round(float(y['rating']))
+        if y['price'] != '':
+            con.reconnect()
+            db.execute(f"""UPDATE products SET price = '₹{y['price']}', availability = "{y['availability']}", rating = '{rate}' WHERE product_id = {i[0]}""")
+        else:
+            db.execute(f"""UPDATE products SET availability = "{y['availability']}", rating = '{rate}' WHERE product_id = {i[0]}""")
+        con.commit()
 
 @app.route('/products', methods = ["POST", "GET"])
 @login_required
 def add():
-    global proderr
-    global paserr
-    paserr = ""
-    global product_list
-    global current_page
-    current_page = '/products'
+    session['paserr'] = ""
+    session['uperr'] = ""
+    session['currentp'] = '/products'
     if request.method == "POST":
         asin = request.form['asin'].upper()
-        # try:
-        product = getall(asin)
-        # except:
-        #     proderr = "Product Not Found"
-        #     return redirect('/products')
+        try:
+            product = getall(asin)
+        except:
+            session['proderr'] = "Product Not Found"
+            return redirect('/products')
         title = product['name'].replace('"', "'")
         price = product['price']
         rating = round(float(product['rating']))
@@ -287,18 +236,17 @@ def add():
             con.commit()
             return redirect('/products')
         else:
-            proderr = "Please fill out all the details"
+            session['proderr'] = "Please fill out all the details"
             return redirect('/products')
     else:
-        if fromadminsearch:
-            return render_template('products.html', products = product_list, err = proderr)
+        if session['frmadmsearch']:
+            return render_template('products.html', products = session['products'], err = session['proderr'])
         else:
             con.reconnect()
             db = con.cursor()
             db.execute("SELECT * from products")
-            product_list = db.fetchall()
-            product_list = product_list[::-1]
-            return render_template('products.html', products = product_list, err = proderr)
+            session['products'] = db.fetchall()[::-1]
+            return render_template('products.html', products = session['products'], err = session['proderr'])
 
 @app.route('/delete/<int:prod_id>')
 def delete(prod_id):
@@ -314,17 +262,20 @@ def updateprice(id):
     db = con.cursor()
     if request.method == "POST":
         price = "₹" + request.form['price']
-        db.execute(f"UPDATE products SET price = '{price}' WHERE product_id = {id}")
-        con.commit()
-        return redirect('/products')
+        if price != '₹':
+            db.execute(f"UPDATE products SET price = '{price}' WHERE product_id = {id}")
+            con.commit()
+            return redirect('/products')
+        else:
+            session['uperr'] = "Price can't be empty"
+            return redirect(f'/updateprice/{id}')
     else:
         db.execute(f"SELECT * FROM products WHERE product_id = {id}")
         p = db.fetchall()[0]
-        return render_template("addprice.html", p = p)
+        return render_template("addprice.html", p = p, err = session['uperr'])
 
 @app.route('/update/<int:prod_id>', methods = ["POST", "GET"])
 def update(prod_id):
-    global uperr
     if request.method == "POST":
         asin = request.form['asin'].upper()
         con.reconnect()
@@ -335,7 +286,7 @@ def update(prod_id):
             try:
                 product = getall(asin)
             except:
-                uperr = "Product Not Found"
+                session['uperr'] = "Product Not Found"
                 return redirect(f'/update/{prod_id}')
             title = product['name'].replace('"', "'")
             price = product['price']
@@ -368,14 +319,14 @@ def update(prod_id):
             con.commit()
             return redirect('/products')
         else:
-            uperr = "Please fill out all the details"
+            session['uperr'] = "Please fill out all the details"
             return redirect(f'/update/{prod_id}')
     else:
         con.reconnect()
         db = con.cursor()
         db.execute(f"SELECT * FROM products WHERE product_id = {prod_id}")
         product = db.fetchall()[0]
-        return render_template('update.html', p = product, err = uperr)
+        return render_template('update.html', p = product, err = session['uperr'])
 
 if __name__ == "__main__":
     app.run(debug=True)

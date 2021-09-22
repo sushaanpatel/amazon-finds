@@ -11,7 +11,6 @@
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Ubuntu&family=Work+Sans:wght@400;900&display=swap');
             .dark{
                 background-color: #222222;
                 font-family: 'Open Sans', sans-serif;
@@ -31,7 +30,7 @@
             input.form-control.dark {
                 background-color:#424242;
                 color: white;
-                border: #202020;
+                border: lightgray;
             }
             input.form-control.white {
                 background-color:#e9e9e9;
@@ -72,8 +71,8 @@
                 </ul>
                 <div class="d-flex">
                     <div class="form-check form-switch" style="margin-left:4px;margin-right:8px;">
-                        <label for="in" style="color:white;font-size:18px;">Dark Mode</label>
-                        <input type="checkbox" id="in" onclick="theme()" style="font-size: 18px;" class="form-check-input">
+                        <label for="switch" style="color:white;font-size:18px;">Dark Mode</label>
+                        <input type="checkbox" id="switch" onclick="theme()" style="font-size: 18px;" class="form-check-input">
                     </div>
                 </div>
               </div>
@@ -110,7 +109,7 @@
         <div style="width: 99%;max-width:1150px;margin-top:1%;">
             <form action="/search" method="POST">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control white" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
+                    <input type="text" class="form-control white" placeholder="Find Products" name="search_bar" id="search_bar" style="font-size: 18px;">
                     <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
                 </div>
             </form>
@@ -124,7 +123,7 @@
                         <option value="price">Price</option>
                     </select>
                     <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
-                    <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 16px;">Clear</a>
+                    <a class="btn btn-dark" href="/clearfilter" id="filbtn" type="button" style="font-size: 16px;">Clear</a>
                 </div>
             </form>
         </div>
@@ -148,7 +147,7 @@
             <div class="row">
                 {% for o in i %}
                 <div class="col">
-                    <a target="_blank" href="/product/id={{o[0]}}"><div class="card white-div" id="div" style="margin-bottom: 6.5%; height:500px;border:0px;">
+                    <a target="_blank" href="/product/id={{o[0]}}"><div class="card white-div" id="div" style="margin-bottom: 6.5%; height:500px;border:0px;border-radius:10px;">
                         <center>
                         <img src="{{o[7].split(',')[0]}}" height="260px" alt="{{o[2]}}" style="margin-top: 5%;max-width:320px;" class="rounded">
                         </center>
@@ -185,34 +184,66 @@
         <script>
             mybutton = document.getElementById("topbutton");
             window.onscroll = function() {scrollFunction()};
+            window.onload = function() {getTheme()};
+
+            function getTheme(){
+                var mode = localStorage.getItem("mode")
+                var body = document.body
+                var sw = document.getElementById('switch')
+                if (mode == "dark"){
+                    var card_div = document.querySelectorAll('.white-div')
+                    document.getElementById('search_bar').className = "form-control dark"
+                    document.getElementById('filter').className = "btn btn-light"
+                    document.getElementById('filbtn').className = "btn btn-light"
+                    body.className = 'dark'
+                    for (var i = 0;i<card_div.length;i++){
+                        card_div[i].className = "card dark-div"
+                    }
+                    sw.checked = true
+                    document.getElementById('fil').className = "btn btn-light"
+                    document.getElementById('sub_fil').className = "btn btn-light"
+                }
+                else{
+                    var card_div = document.querySelectorAll('.dark-div')
+                    document.getElementById('search_bar').className = "form-control white"
+                    document.getElementById('filter').className = "btn btn-dark"
+                    document.getElementById('filbtn').className = "btn btn-dark"
+                    body.className = 'white'
+                    for (var i = 0;i<card_div.length;i++){
+                        card_div[i].className = "card white-div"
+                    }
+                    sw.checked = false
+                    document.getElementById('fil').className = "btn btn-dark"
+                    document.getElementById('sub_fil').className = "btn btn-dark"
+                }
+            }
 
             function theme(){
                 var body = document.body;
                 if (body.className == "white"){
                     var card_div = document.querySelectorAll('.white-div')
-                    var input= document.querySelectorAll('.form-control white')
-                    var buttons = document.querySelectorAll('.btn btn-dark')
+                    document.getElementById('search_bar').className = "form-control dark"
+                    document.getElementById('filter').className = "btn btn-light"
+                    document.getElementById('filbtn').className = "btn btn-light"
                     body.className = 'dark'
                     for (var i = 0;i<card_div.length;i++){
                         card_div[i].className = "card dark-div"
                     }
-                    for (var i = 0;i<buttons.length;i++){
-                        buttons[i].className = "btn btn-light"
-                    }
-                    for (var i = 0;i<input.length;i++){
-                        input[i].className = "form-control dark"
-                    }
+                    localStorage.setItem("mode", "dark")
+                    document.getElementById('fil').className = "btn btn-light"
+                    document.getElementById('sub_fil').className = "btn btn-light"
                 } else {
                     var card_div = document.querySelectorAll('.dark-div')
-                    var input= document.querySelectorAll('.form-control dark')
-                    var buttons = document.querySelectorAll('.btn btn-dark')
+                    document.getElementById('search_bar').className = "form-control white"
+                    document.getElementById('filter').className = "btn btn-dark"
+                    document.getElementById('filbtn').className = "btn btn-dark"
                     body.className = 'white'
                     for (var i = 0;i<card_div.length;i++){
                         card_div[i].className = "card white-div"
                     }
-                    for (var i = 0;i<buttons.length;i++){
-                        buttons[i].className = "btn btn-dark"
-                    }
+                    localStorage.setItem("mode", "white")
+                    document.getElementById('fil').className = "btn btn-dark"
+                    document.getElementById('sub_fil').className = "btn btn-dark"
                 }
             }
 
@@ -247,7 +278,7 @@
                                 <option value="price">Price</option>
                             </select>
                             <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
-                            <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 16px;">Clear</a>
+                            <a class="btn btn-dark" href="/clearfilter" id="filbtn" type="button" style="font-size: 16px;">Clear</a>
                           </div>
                     </form>
                     `;
@@ -266,7 +297,7 @@
                                 <option value="price" selected>Price</option>
                             </select>
                             <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
-                            <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 16px;">Clear</a>
+                            <a class="btn btn-dark" href="/clearfilter" id="filbtn" type="button" style="font-size: 16px;">Clear</a>
                           </div>
                     </form>
                     `;
@@ -281,7 +312,7 @@
                     `
                     <form action="/filter" method="POST">
                         <div class="input-group mb-3">
-                            <select name="sub_fil" class="btn btn-dark dropdown" style="font-size: 18px;">
+                            <select name="sub_fil" id="sub_fil" class="btn btn-dark dropdown" style="font-size: 18px;">
                                 <option value="Home/Kichten">Kitchen</option>
                                 <option value="Home/Bathroom">Bathroom</option>
                             </select>
@@ -295,7 +326,7 @@
                                 <option value="price">Price</option>
                             </select>
                             <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
-                            <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 16px;">Clear</a>
+                            <a class="btn btn-dark" href="/clearfilter" id="filbtn" type="button" style="font-size: 16px;">Clear</a>
                           </div>
                     </form>
                     `;
@@ -305,7 +336,7 @@
                     `
                     <form action="/filter" method="POST">
                         <div class="input-group mb-3">
-                            <select name="sub_fil" class="btn btn-dark dropdown" style="font-size: 18px;">
+                            <select name="sub_fil" id="sub_fil" class="btn btn-dark dropdown" style="font-size: 18px;">
                                 <option value="Elder/Cushions">Cushions</option>
                                 <option value="Elder/Accupenture">Accupenture</option>
                             </select>
@@ -319,7 +350,7 @@
                                 <option value="price">Price</option>
                             </select>
                             <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
-                            <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 16px;">Clear</a>    
+                            <a class="btn btn-dark" href="/clearfilter" id="filbtn" type="button" style="font-size: 16px;">Clear</a>    
                         </div>
                     </form>
                     `;
@@ -329,7 +360,7 @@
                     `
                     <form action="/filter" method="POST">
                         <div class="input-group mb-3">
-                            <select name="sub_fil" class="btn btn-dark dropdown" style="font-size: 18px;">
+                            <select name="sub_fil" id="sub_fil" class="btn btn-dark dropdown" style="font-size: 18px;">
                                 <option value="Electronics/Mobile">Mobile</option>
                                 <option value="Electronics/Laptop">Laptop</option>
                             </select>
@@ -343,29 +374,11 @@
                                 <option value="price">Price</option>
                             </select>
                             <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
-                            <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 16px;">Clear</a>
+                            <a class="btn btn-dark" href="/clearfilter" id="filbtn" type="button" style="font-size: 16px;">Clear</a>
                         </div>
                     </form>
                     `;
                 }
-                /*if (fil == "all"){
-                    div.innerHTML =
-                    `
-                    <form action="/search" method="POST">
-                        <div class="input-group mb-3">
-                            <select name="filter" class="btn btn-dark dropdown" id="filter" onclick="changesearch()" style="font-size: 18px;width:100px;">
-                                <option value="all" selected>All</option>
-                                <option value="homeapp">Home Appliances &ThickSpace;</option>
-                                <option value="elderassist">Elder Assistance</option>
-                                <option value="elect">Electronic</option>
-                            </select>
-                            <input type="text" class="form-control" placeholder="Find Products" name="search_bar" style="font-size: 18px;">
-                            <input type="submit" value="Search" class="btn btn-primary" style="font-size: 18px;">
-                            <a class="btn btn-dark" href="/clearfilter" type="button" style="font-size: 18px;">Clear</a>
-                        </div>
-                    </form>
-                    `;
-                }*/
             }
         </script>
     </body>

@@ -112,11 +112,12 @@
         </div>
         <hr class="white">
         <p style="font-size:20px;"><b>Existing Products</b></p>
+        <a href="/updatedb" class="btn btn-primary" style="float: right;margin-right:0.5%;">Update All Products</a>
         <div style="width:30%;min-width:350px;float:right;margin-right:0.5%;">
                 <form action="/adminsearch" method="POST">
                     <div class="input-group mb-3">
                         <input type="text" name="adsearch" class="form-control" placeholder="Search By Name">
-                        <input type="submit" value="Search" class="btn btn-primary">
+                        <button type="submit" class="btn btn-primary"><b><i class="bi bi-search"></i></b></button>
                         <a class="btn btn-dark" href="/clearfilter">Clear</a>
                     </div>
                 </form>
