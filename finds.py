@@ -20,6 +20,7 @@ def unauth():
 
 @app.before_first_request
 def before():
+    session.clear()
     session['paserr'] = ""
     session['proderr'] = ""
     session['uperr'] = ""
