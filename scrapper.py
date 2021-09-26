@@ -1,7 +1,6 @@
 import os
 import dotenv
 from scraper_api import ScraperAPIClient
-import requests
 
 dotenv.load_dotenv()
 api = os.environ.get('APIKEY')

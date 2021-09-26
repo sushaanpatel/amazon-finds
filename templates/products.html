@@ -79,8 +79,21 @@
         </style>
     </head>
     <body class="white">
+        <div class="modal fade" id="updb" tabindex="-1" aria-labelledby="Update All Products" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-body">
+                    <center>
+                    <h2>Sorry! This might take some time.</h2>
+                    <div class="spinner-border text-dark" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    </center>
+                </div>
+              </div>
+            </div>
+        </div>
         <center>
-        <!-- <hr class="white"> -->
         <a href="/logout" class="btn btn-danger" style="float: left;margin:4px;">Log-out</a>
         <button id="topbutton" class="btn btn-dark" onclick="topFunction()"><i style="font-size:30px;" class="bi bi-arrow-bar-up"></i></button>
         <br><br>
@@ -112,7 +125,7 @@
         </div>
         <hr class="white">
         <p style="font-size:20px;"><b>Existing Products</b></p>
-        <a href="/updatedb" class="btn btn-primary" style="float: left;margin-left:0.5%;">Update All Products</a><br>
+        <a href="/updatedb" class="btn btn-primary" style="float: left;margin-left:0.5%;"><b data-bs-toggle="modal" data-bs-target="#updb">Update All Products</b></a><br>
         <div style="width:30%;min-width:350px;float:right;margin-right:0.5%;">
                 <form action="/adminsearch" method="POST">
                     <div class="input-group mb-3">

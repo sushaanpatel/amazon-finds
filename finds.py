@@ -186,8 +186,7 @@ def adminsearch():
         return redirect('/products')
 
 @app.route('/updatedb')
-@app.route('/updatedb/<int:id>')
-def updb(id):
+def updb():
     con.reconnect()
     db = con.cursor()
     db.execute("SELECT * FROM products")
@@ -201,6 +200,7 @@ def updb(id):
         else:
             db.execute(f"""UPDATE products SET availability = "{y['availability']}", rating = '{rate}' WHERE product_id = {i[0]}""")
         con.commit()
+    return redirect('/products')
 
 @app.route('/products', methods = ["POST", "GET"])
 @login_required
