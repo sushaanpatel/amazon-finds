@@ -20,7 +20,8 @@ def unauth():
 
 @app.before_first_request
 def before():
-    session.clear()
+    for key in list(session.keys()):
+        session.pop(key)
     session['paserr'] = ""
     session['proderr'] = ""
     session['uperr'] = ""
@@ -34,31 +35,28 @@ def format(unformat):
     lenght = len(unformat)
     count = 0
     formated_list = []
-    if unformat == []:
-        formated_list = []
-    else:
-        while count < lenght:
-            try:
-                temp = []
-                temp.append(unformat[count])
-                temp.append(unformat[count+1])
-                temp.append(unformat[count+2])
-                formated_list.append(temp)
+    while count < lenght:
+        try:
+            temp = []
+            temp.append(unformat[count])
+            temp.append(unformat[count+1])
+            temp.append(unformat[count+2])
+            formated_list.append(temp)
+            count += 3
+        except IndexError:
+            if lenght%3 == 1:
+                x = unformat[::-1]
+                y = []
+                y.append(x[0])
+                formated_list.append(y)
                 count += 3
-            except IndexError:
-                if lenght%3 == 1:
-                    x = unformat[::-1]
-                    y = []
-                    y.append(x[0])
-                    formated_list.append(y)
-                    count += 3
-                if lenght%3 == 2:
-                    x = unformat[::-1]
-                    y = []
-                    y.append(x[0])
-                    y.append(x[1])
-                    formated_list.append(y[::-1])
-                    count += 3
+            if lenght%3 == 2:
+                x = unformat[::-1]
+                y = []
+                y.append(x[0])
+                y.append(x[1])
+                formated_list.append(y[::-1])
+                count += 3
     return formated_list
 
 @app.route('/logout')
@@ -146,11 +144,6 @@ def filter():
                 for i in j:
                     if i[5] == sub_fil:
                         out.append(i)
-        elif fil == 'price':
-            if sub_fil == 'high':
-                pass
-            elif sub_fil == 'low':
-                pass
         session['frmsearch'] = True
         temp = format(out)
         session['display'] = temp

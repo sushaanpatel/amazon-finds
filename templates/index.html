@@ -65,9 +65,16 @@
                 padding-right: 10px;
                 padding-bottom: 6px;
             }
+            .bod{
+                overflow-y: scroll;
+                
+            }
+            .bod::-webkit-scrollbar {
+                display: none;
+            }
         </style>
     </head>
-    <body class="white">
+    <body class="white bod">
         <nav class="navbar navbar-expand-lg navbar-dark nav-bg" id="navbar">
             <div class="container-fluid">
               <a class="navbar-brand" href="/home"><b><img src="../static/icons/white-plane-small.png">Amazon Finds</b></a>
@@ -131,7 +138,6 @@
                 <div class="input-group mb-3">
                     <select name="filter" class="btn btn-dark dropdown" id="filter" onclick="changesearch()" style="font-size: 18px;width:100px;">
                         <option value="category">Category</option>
-                        <option value="price">Price</option>
                     </select>
                     <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
                     <a class="btn btn-dark" href="/clearfilter" id="filbtn" type="button" style="font-size: 16px;">Clear</a>
@@ -188,7 +194,7 @@
             {% endfor %}
             {% endif %}
             <center>
-            <a href="/home" class="btn btn-dark" style="width: 30%;"><b>Load More Products</b></a>
+            <a href="/home" class="btn btn-dark" style="font-size: 25px;"><b><i class="bi bi-arrow-clockwise"></i></b></a>
             </center>
         </div>
         <br>
@@ -201,12 +207,12 @@
                 var mode = localStorage.getItem("mode")
                 var body = document.body
                 var sw = document.getElementById('switch')
-                if (mode == "dark"){
+                if (mode == "dark bod"){
                     var card_div = document.querySelectorAll('.white-div')
                     document.getElementById('search_bar').className = "form-control dark"
                     document.getElementById('filter').className = "btn btn-light"
                     document.getElementById('filbtn').className = "btn btn-light"
-                    body.className = 'dark'
+                    body.className = 'dark bod'
                     for (var i = 0;i<card_div.length;i++){
                         card_div[i].className = "card dark-div"
                     }
@@ -219,7 +225,7 @@
                     document.getElementById('search_bar').className = "form-control white"
                     document.getElementById('filter').className = "btn btn-dark"
                     document.getElementById('filbtn').className = "btn btn-dark"
-                    body.className = 'white'
+                    body.className = 'white bod'
                     for (var i = 0;i<card_div.length;i++){
                         card_div[i].className = "card white-div"
                     }
@@ -231,12 +237,12 @@
 
             function theme(){
                 var body = document.body;
-                if (body.className == "white"){
+                if (body.className == "white bod"){
                     var card_div = document.querySelectorAll('.white-div')
                     document.getElementById('search_bar').className = "form-control dark"
                     document.getElementById('filter').className = "btn btn-light"
                     document.getElementById('filbtn').className = "btn btn-light"
-                    body.className = 'dark'
+                    body.className = 'dark bod'
                     for (var i = 0;i<card_div.length;i++){
                         card_div[i].className = "card dark-div"
                     }
@@ -248,7 +254,7 @@
                     document.getElementById('search_bar').className = "form-control white"
                     document.getElementById('filter').className = "btn btn-dark"
                     document.getElementById('filbtn').className = "btn btn-dark"
-                    body.className = 'white'
+                    body.className = 'white bod'
                     for (var i = 0;i<card_div.length;i++){
                         card_div[i].className = "card white-div"
                     }
@@ -286,26 +292,6 @@
                             </select>
                             <select name="filter" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;width:100px;">
                                 <option value="category" selected>Category</option>
-                                <option value="price">Price</option>
-                            </select>
-                            <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
-                            <a class="btn btn-dark" href="/clearfilter" id="filbtn" type="button" style="font-size: 16px;">Clear</a>
-                          </div>
-                    </form>
-                    `;
-                }
-                if (fil == "price"){
-                    div.innerHTML = 
-                    `
-                    <form action="/filter" method="POST">
-                        <div class="input-group mb-3">
-                            <select name="sub_fil" class="btn btn-dark dropdown" id="fil" style="font-size: 18px;width:100px;">
-                                <option value="high">High - Low</option>
-                                <option value="low">Low - High</option>
-                            </select>
-                            <select name="filter" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;width:100px;">
-                                <option value="category">Category</option>
-                                <option value="price" selected>Price</option>
                             </select>
                             <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
                             <a class="btn btn-dark" href="/clearfilter" id="filbtn" type="button" style="font-size: 16px;">Clear</a>
@@ -334,7 +320,6 @@
                             </select>
                             <select name="filter" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;width:100px;">
                                 <option value="category" selected>Category</option>
-                                <option value="price">Price</option>
                             </select>
                             <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
                             <a class="btn btn-dark" href="/clearfilter" id="filbtn" type="button" style="font-size: 16px;">Clear</a>
@@ -358,7 +343,6 @@
                             </select>
                             <select name="filter" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;width:100px;">
                                 <option value="category" selected>Category</option>
-                                <option value="price">Price</option>
                             </select>
                             <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
                             <a class="btn btn-dark" href="/clearfilter" id="filbtn" type="button" style="font-size: 16px;">Clear</a>    
@@ -382,7 +366,6 @@
                             </select>
                             <select name="filter" class="btn btn-dark dropdown" id="filter" oninput="changesearch()" style="font-size: 18px;width:100px;*+">
                                 <option value="category" selected>Category</option>
-                                <option value="price">Price</option>
                             </select>
                             <button type="submit" class="btn btn-primary" style="font-size:20px;"><b><i class="bi bi-search"></i></b></button>
                             <a class="btn btn-dark" href="/clearfilter" id="filbtn" type="button" style="font-size: 16px;">Clear</a>

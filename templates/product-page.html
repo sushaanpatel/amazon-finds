@@ -72,9 +72,16 @@
             .gridcard{
                 margin-bottom: 6.5%;
             }
+            .bod{
+                overflow-y: scroll;
+                
+            }
+            .bod::-webkit-scrollbar {
+                display: none;
+            }
         </style>
     </head>
-    <body class="white">
+    <body class="white bod">
         <nav class="navbar navbar-expand-lg navbar-dark nav-bg" id="navbar">
             <div class="container-fluid">
               <a class="navbar-brand" href="/home"><b><img src="../static/icons/white-plane-small.png">Amazon Finds</b></a>
@@ -87,12 +94,12 @@
                     <a class="nav-link active" style="font-size: 18px;" data-bs-toggle="modal" data-bs-target="#lang"><i class="bi bi-translate"></i> Language</a>
                   </li>
                 </ul>
-                <!-- <div class="d-flex">
+                <div class="d-flex">
                     <div class="form-check form-switch" style="margin-left:4px;margin-right:8px;">
                         <label for="in" style="color:white;font-size:18px;">Dark Mode</label>
-                        <input type="checkbox" id="in" onclick="theme()" style="font-size: 18px;" class="form-check-input">
+                        <input type="checkbox" id="switch" onclick="theme()" style="font-size: 18px;" class="form-check-input">
                     </div>
-                </div> -->
+                </div>
               </div>
             </div>
         </nav>
@@ -158,7 +165,7 @@
                 </div>
                 <div class="col" style="margin-bottom:6.5%;min-width:180px;">
                     <center>
-                    <div class="white-div" style="border-radius: 5px;width:100%;height:max-content;">
+                    <div class="white-div" id="pdiv" style="border-radius: 5px;width:100%;height:max-content;">
                         <div>
                         <br>
                         <p style="font-size:25px;margin:4px;"><b>{{p[4]}}</b></p>
@@ -191,6 +198,7 @@
         <script>
             mybutton = document.getElementById("topbutton");
             window.onscroll = function() {scrollFunction()};
+            window.onload = function() {getTheme()};
 
             function scrollFunction() {
                 if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
@@ -205,34 +213,34 @@
                 document.documentElement.scrollTop = 0
             }
 
+            function getTheme(){
+                var mode = localStorage.getItem('mode')
+                var body = document.body
+                var sw = document.getElementById('switch')
+                if (mode == "dark"){
+                    var price_div = document.getElementById('pdiv')
+                    price_div.className = "dark-div"
+                    body.className = 'dark bod'
+                    sw.checked = true
+                } else{
+                    var price_div = document.getElementById('pdiv')
+                    price_div.className = "white-div"
+                    body.className = 'white bod'
+                    sw.checked = false
+                }
+            }
+
             function theme(){
                 var body = document.body;
-                if (body.className == "white"){
-                    var card_div = document.querySelectorAll('.white-div')
-                    var input= document.querySelectorAll('.form-control white')
-                    var buttons = document.querySelectorAll('.btn btn-dark')
-                    body.className = 'dark'
-                    for (var i = 0;i<card_div.length;i++){
-                        card_div[i].className = "card dark-div"
-                    }
-                    for (var i = 0;i<buttons.length;i++){
-                        buttons[i].className = "btn btn-light"
-                    }
-                    for (var i = 0;i<input.length;i++){
-                        input[i].className = "form-control dark"
-                    }
+                if (body.className == "white bod"){
+                    var price_div = document.getElementById('pdiv')
+                    price_div.className = "dark-div"
+                    body.className = 'dark bod'
                     localStorage.setItem("mode", "dark")
                 } else {
-                    var card_div = document.querySelectorAll('.dark-div')
-                    var input= document.querySelectorAll('.form-control dark')
-                    var buttons = document.querySelectorAll('.btn btn-dark')
-                    body.className = 'white'
-                    for (var i = 0;i<card_div.length;i++){
-                        card_div[i].className = "card white-div"
-                    }
-                    for (var i = 0;i<buttons.length;i++){
-                        buttons[i].className = "btn btn-dark"
-                    }
+                    var price_div = document.getElementById('pdiv')
+                    price_div.className = "white-div"
+                    body.className = 'white bod'
                     localStorage.setItem("mode", "white")
                 }
             }

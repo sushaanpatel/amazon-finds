@@ -15,6 +15,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/'
 app.secret_key = "amazonfindsretkey"
 db2 = SQLAlchemy(app)
+
+# con = mysql.connector.connect(
+#     host = "localhost",
+#     user = 'root',
+#     password = 'password',
+#     database = "amazonfinds"
+# )
 con = mysql.connector.connect(
     host = "us-cdbr-east-04.cleardb.com",
     user = db_user,
