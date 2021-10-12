@@ -28,8 +28,8 @@ def before():
     session['products'] = []
     session['display'] = []
     session['currentp'] = ""
-    session['frmadmsearch'] = False
-    session['frmsearch'] = False
+    session['frmadmsearch'] = 0
+    session['frmsearch'] = 0
 
 def format(unformat):
     lenght = len(unformat)
@@ -67,10 +67,10 @@ def logout():
 @app.route('/clearfilter')
 def clear():
     if session['currentp'] == '/products':
-        session['frmadmsearch'] = False
+        session['frmadmsearch'] = 0
         return redirect('/products')
     if session['currentp'] == '/':
-        session['frmsearch'] = False
+        session['frmsearch'] = 0
         return redirect('/')
 
 @app.route('/buynow/<int:id>')
@@ -86,8 +86,8 @@ def buynow(id):
 
 @app.route('/home', methods = ["POST", "GET"])
 def home():
-    session['frmadmsearch'] = False
-    session['frmsearch'] = False
+    session['frmadmsearch'] = 0
+    session['frmsearch'] = 0
     session['currentp'] = '/'
     return redirect('/')
 
@@ -98,7 +98,7 @@ def index():
     session['currentp'] = '/'
     con.reconnect()
     db = con.cursor()
-    if session['frmsearch'] == False:
+    if session['frmsearch'] == 0:
         db.execute("SELECT * from products")
         prod_list = db.fetchall()
         out = format(prod_list)
@@ -125,7 +125,7 @@ def search():
         db = con.cursor()
         db.execute(f"SELECT * FROM products WHERE name LIKE '%{searchword}%'")
         query = db.fetchall()
-        session['frmsearch'] = True
+        session['frmsearch'] = 1
         out = format(query)
         for i in range(len(out)):
             out[i] = out[i][::-1]
@@ -144,7 +144,7 @@ def filter():
                 for i in j:
                     if i[5] == sub_fil:
                         out.append(i)
-        session['frmsearch'] = True
+        session['frmsearch'] = 1
         temp = format(out)
         session['display'] = temp
         return redirect('/')
@@ -174,7 +174,7 @@ def adminsearch():
         db = con.cursor()
         db.execute(f"SELECT * FROM products WHERE name LIKE '%{search}%'")
         query = db.fetchall()
-        session['frmadmsearch'] = True
+        session['frmadmsearch'] = 1
         session['products'] = query[::-1]
         return redirect('/products')
 
