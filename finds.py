@@ -18,18 +18,22 @@ def load_user(user_id):
 def unauth():
     return redirect('/admin')
 
+def check(key, val):
+    if session.get(key) == None:
+        session[key] = val
+
 @app.before_first_request
 def before():
     for key in list(session.keys()):
         session.pop(key)
-    session['paserr'] = ""
-    session['proderr'] = ""
-    session['uperr'] = ""
-    session['products'] = []
-    session['display'] = []
-    session['currentp'] = ""
-    session['frmadmsearch'] = 0
-    session['frmsearch'] = 0
+    check('passerr', "")
+    check('proderr', "")
+    check('uperr', "")
+    check('products', [])
+    check('display', [])
+    check('currentp', "")
+    check('frmadmsearch', 0)
+    check('frmsearch', 0)
 
 def format(unformat):
     lenght = len(unformat)
