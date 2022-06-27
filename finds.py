@@ -22,10 +22,8 @@ def check(key, val):
     if session.get(key) == None:
         session[key] = val
 
-@app.before_first_request
+@app.before_request
 def before():
-    for key in list(session.keys()):
-        session.pop(key)
     check('passerr', "")
     check('proderr', "")
     check('uperr', "")
